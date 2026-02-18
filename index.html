@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AxelWorld - Coming Soon</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #f0f0f0;
+            background: #0a0a1a;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background: rgba(10, 10, 26, 0.95);
+            border-bottom: 1px solid #1a1a3a;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .logo span {
+            color: #7b5cff;
+        }
+
+        nav a {
+            color: #c0c0d0;
+            text-decoration: none;
+            margin-left: 30px;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #7b5cff;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 120px 20px 100px;
+            background: linear-gradient(180deg, #0a0a1a 0%, #151530 50%, #0a0a1a 100%);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            letter-spacing: 3px;
+        }
+
+        .hero h1 span {
+            color: #7b5cff;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #a0a0b8;
+            max-width: 600px;
+            margin: 0 auto 40px;
+            line-height: 1.7;
+        }
+
+        .badge-coming-soon {
+            display: inline-block;
+            padding: 8px 24px;
+            background: rgba(123, 92, 255, 0.15);
+            border: 1px solid #7b5cff;
+            border-radius: 50px;
+            color: #7b5cff;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 14px 36px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: #7b5cff;
+            color: #fff;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 8px 30px rgba(123, 92, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #c0c0d0;
+            border: 1px solid #3a3a5a;
+        }
+
+        .btn-secondary:hover {
+            border-color: #7b5cff;
+            color: #fff;
+        }
+
+        .features {
+            padding: 80px 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .features h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 50px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: #111128;
+            border: 1px solid #1e1e40;
+            border-radius: 12px;
+            padding: 30px;
+            transition: border-color 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: #7b5cff;
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 16px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.15rem;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            color: #a0a0b8;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .about {
+            padding: 80px 40px;
+            text-align: center;
+            background: #111128;
+        }
+
+        .about h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .about p {
+            max-width: 650px;
+            margin: 0 auto;
+            color: #a0a0b8;
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid #1a1a3a;
+            color: #606078;
+            font-size: 0.85rem;
+        }
+
+        footer .company {
+            margin-bottom: 8px;
+            color: #808098;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                gap: 16px;
+                padding: 16px 20px;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .features, .about {
+                padding: 60px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">AXEL<span>WORLD</span></div>
+        <nav>
+            <a href="#about">About</a>
+            <a href="privacy.html">Privacy</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="badge-coming-soon">Coming Soon</div>
+        <h1>Welcome to <span>AxelWorld</span></h1>
+        <p>A new mobile gaming experience is on its way. Get ready to explore, compete, and conquer in a world like no other.</p>
+        <div class="cta-buttons">
+            <a href="#about" class="btn btn-primary">Learn More</a>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <h2>What to Expect</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">&#127918;</div>
+                <h3>Immersive Gameplay</h3>
+                <p>Dive into a richly crafted world with smooth controls and engaging mechanics built for mobile.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#9876;</div>
+                <h3>Multiplayer Battles</h3>
+                <p>Challenge friends and players worldwide in real-time competitive modes.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#127775;</div>
+                <h3>Unique Characters</h3>
+                <p>Unlock and customize a roster of characters, each with distinct abilities and play styles.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="about" id="about">
+        <h2>About AxelWorld</h2>
+        <p>AxelWorld is an upcoming mobile game that blends fast-paced action with deep strategy. Whether you're a casual player or a competitive gamer, there's something here for you. Stay tuned for more details on our launch date and early access opportunities.</p>
+    </section>
+
+    <footer>
+        <p class="company">Golden Order, Inc.</p>
+        <p><a href="privacy.html" style="color: #606078; text-decoration: none;">Privacy Policy</a></p>
+        <p>&copy; 2026 AxelWorld. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
