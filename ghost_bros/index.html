@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GHOST BROS. — A Cinematic Storyboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Source+Sans+3:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-deep: #0c0c12;
+    --bg-raised: #12121a;
+    --bg-card: #181824;
+    --ink-primary: #f0eee6;
+    --ink-secondary: #a8a498;
+    --ink-muted: #6b6560;
+    --accent-rust: #c45c3a;
+    --accent-mustard: #c4a03a;
+    --accent-navy: #3a4a6a;
+    --accent-ghost: #7a9aaa;
+    --border-subtle: rgba(240, 238, 230, 0.06);
+    --glow-ghost: rgba(122, 154, 170, 0.08);
+    --font-display: 'Cormorant Garamond', Georgia, serif;
+    --font-body: 'Source Sans 3', -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+    background: var(--bg-deep);
+  }
+
+  body {
+    font-family: var(--font-body);
+    color: var(--ink-primary);
+    background: var(--bg-deep);
+    line-height: 1.7;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* ── Grain texture overlay ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 256px 256px;
+  }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg-deep); }
+  ::-webkit-scrollbar-thumb { background: var(--ink-muted); border-radius: 3px; }
+
+  /* ── Navigation ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(to bottom, var(--bg-deep) 60%, transparent);
+    transition: opacity 0.4s ease;
+  }
+  nav.scrolled {
+    background: rgba(12, 12, 18, 0.92);
+    backdrop-filter: blur(12px);
+  }
+  nav .logo {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ink-primary);
+  }
+  nav .logo span { color: var(--accent-rust); }
+  nav .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+  nav .nav-links a {
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-secondary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+    position: relative;
+  }
+  nav .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 0;
+    width: 0; height: 1px;
+    background: var(--accent-rust);
+    transition: width 0.3s ease;
+  }
+  nav .nav-links a:hover { color: var(--ink-primary); }
+  nav .nav-links a:hover::after { width: 100%; }
+
+  /* ── Section base ── */
+  section {
+    position: relative;
+    width: 100%;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  /* ── Reveal animation ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* ── Hero ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg,
+      var(--bg-deep) 0%,
+      #0f0f1a 40%,
+      #1a1520 70%,
+      var(--bg-deep) 100%
+    );
+    z-index: 0;
+  }
+  .hero-fog {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 100%, rgba(122, 154, 170, 0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 40% at 30% 60%, rgba(196, 92, 58, 0.03) 0%, transparent 60%);
+    z-index: 1;
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 0 20px;
+  }
+  .hero .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent-rust);
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+  }
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(48px, 10vw, 120px);
+    font-weight: 300;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--ink-primary);
+    margin-bottom: 16px;
+    opacity: 0;
+    animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+  }
+  .hero h1 em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--accent-ghost);
+  }
+  .hero .tagline {
+    font-family: var(--font-display);
+    font-size: clamp(18px, 3vw, 28px);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--ink-secondary);
+    letter-spacing: 0.02em;
+    max-width: 600px;
+    margin: 0 auto 48px;
+    opacity: 0;
+    animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
+  }
+  .hero .meta {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    opacity: 0;
+    animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.9s forwards;
+  }
+  .hero-scroll {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 1.2s forwards;
+  }
+  .hero-scroll span {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+  .hero-scroll .line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--ink-muted), transparent);
+    animation: pulseLine 2s ease-in-out infinite;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pulseLine {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+
+  /* ── Section headers ── */
+  .section-header {
+    padding: 120px 0 60px;
+    text-align: center;
+  }
+  .section-header .label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent-rust);
+    margin-bottom: 16px;
+  }
+  .section-header h2 {
+    font-family: var(--font-display);
+    font-size: clamp(32px, 5vw, 56px);
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--ink-primary);
+  }
+  .section-header h2 em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--accent-ghost);
+  }
+  .section-divider {
+    width: 40px;
+    height: 1px;
+    background: var(--border-subtle);
+    margin: 24px auto 0;
+  }
+
+  /* ── Logline ── */
+  .logline-block {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 40px 80px;
+    text-align: center;
+  }
+  .logline-block p {
+    font-family: var(--font-display);
+    font-size: clamp(20px, 3vw, 28px);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.6;
+    color: var(--ink-secondary);
+  }
+  .logline-block p strong {
+    font-weight: 600;
+    font-style: normal;
+    color: var(--ink-primary);
+  }
+
+  /* ── Blurb ── */
+  .blurb-section {
+    background: var(--bg-raised);
+    padding: 80px 0;
+    position: relative;
+  }
+  .blurb-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-subtle), transparent);
+  }
+  .blurb-content {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+  .blurb-content p {
+    font-size: 16px;
+    line-height: 1.9;
+    color: var(--ink-secondary);
+    margin-bottom: 20px;
+  }
+  .blurb-content p:last-child { margin-bottom: 0; }
+
+  /* ── Characters ── */
+  .characters-section {
+    padding: 0 0 100px;
+  }
+  .character-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+  .character-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 2px;
+    overflow: hidden;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .character-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px var(--glow-ghost);
+  }
+  .character-card .char-image {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    display: block;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .character-card .char-info {
+    padding: 28px;
+  }
+  .character-card .char-name {
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--ink-primary);
+    margin-bottom: 4px;
+  }
+  .character-card .char-role {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent-rust);
+    margin-bottom: 16px;
+  }
+  .character-card .char-desc {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--ink-secondary);
+  }
+
+  /* ── Storyboard ── */
+  .storyboard-section {
+    padding: 0 0 80px;
+  }
+  .scene-group {
+    margin-bottom: 80px;
+  }
+  .scene-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 32px;
+    padding: 0 40px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .scene-number {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent-rust);
+    white-space: nowrap;
+  }
+  .scene-title {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--ink-primary);
+  }
+  .scene-location {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-left: auto;
+  }
+  .scene-desc {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--ink-secondary);
+    max-width: 800px;
+    margin: 0 40px 32px;
+    padding-left: 0;
+    font-style: italic;
+  }
+  .panel-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+  .panel-grid.single {
+    grid-template-columns: 1fr;
+    max-width: 900px;
+  }
+  .panel-grid.two {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 1000px;
+  }
+  .panel-item {
+    position: relative;
+    border-radius: 2px;
+    overflow: hidden;
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-card);
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .panel-item:hover {
+    transform: scale(1.015);
+  }
+  .panel-item img {
+    width: 100%;
+    display: block;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+  }
+  .panel-caption {
+    padding: 16px 20px;
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--ink-muted);
+    font-family: var(--font-body);
+  }
+  .panel-caption strong {
+    color: var(--ink-secondary);
+    font-weight: 500;
+  }
+
+  /* ── Notes ── */
+  .notes-section {
+    background: var(--bg-raised);
+    padding: 100px 0;
+    position: relative;
+  }
+  .notes-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-subtle), transparent);
+  }
+  .notes-content {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+  .notes-content h3 {
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--ink-primary);
+    margin-bottom: 24px;
+  }
+  .notes-content p {
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--ink-secondary);
+    margin-bottom: 16px;
+  }
+  .notes-content .note-tag {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent-mustard);
+    background: rgba(196, 160, 58, 0.08);
+    padding: 4px 10px;
+    border-radius: 2px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+  }
+
+  /* ── Footer ── */
+  footer {
+    padding: 80px 40px;
+    text-align: center;
+    border-top: 1px solid var(--border-subtle);
+  }
+  footer .endmark {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--ink-muted);
+    letter-spacing: 0.1em;
+  }
+  footer .infinity {
+    font-size: 24px;
+    color: var(--accent-ghost);
+    margin-top: 12px;
+    opacity: 0.5;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    nav { padding: 16px 20px; }
+    nav .nav-links { display: none; }
+    .container, .character-grid, .panel-grid, .scene-header, .scene-desc {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+    .panel-grid.two { grid-template-columns: 1fr; }
+    .character-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 42px; }
+  }
+
+  /* ── Lightbox ── */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: rgba(12, 12, 18, 0.96);
+    backdrop-filter: blur(20px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    cursor: zoom-out;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .lightbox.active {
+    display: flex;
+    opacity: 1;
+  }
+  .lightbox img {
+    max-width: 92vw;
+    max-height: 88vh;
+    object-fit: contain;
+    border-radius: 2px;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+  }
+</style>
+</head>
+<body>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="this.classList.remove('active')">
+  <img src="" alt="" id="lightbox-img">
+</div>
+
+<!-- Navigation -->
+<nav id="navbar">
+  <div class="logo">Ghost <span>Bros.</span></div>
+  <ul class="nav-links">
+    <li><a href="#logline">Logline</a></li>
+    <li><a href="#characters">Characters</a></li>
+    <li><a href="#storyboard">Storyboard</a></li>
+    <li><a href="#notes">Notes</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="hero-fog"></div>
+  <div class="hero-content">
+    <div class="eyebrow">A Horror-Comedy Short</div>
+    <h1>GHOST <em>BROS.</em></h1>
+    <p class="tagline">Two paranormal vloggers fake hauntings for clicks until the dead decide to rate their content.</p>
+    <p class="meta">22 Scenes &middot; 45 Storyboard Panels &middot; Illustrated by Higgsfield AI</p>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="line"></div>
+  </div>
+</section>
+
+<!-- Logline -->
+<section id="logline">
+  <div class="section-header reveal">
+    <div class="label">The Hook</div>
+    <h2>The <em>Logline</em></h2>
+    <div class="section-divider"></div>
+  </div>
+  <div class="logline-block reveal reveal-delay-1">
+    <p>Two broke paranormal vloggers fake ghost hunts for a dying YouTube channel. When they stage one last "investigation" at an abandoned hospital, <strong>the dead show up as their livestream audience</strong> — and they don't want special effects. They want the truth.</p>
+  </div>
+</section>
+
+<!-- Blurb -->
+<section class="blurb-section" id="blurb">
+  <div class="blurb-content">
+    <div class="section-header reveal" style="padding-top:0; padding-bottom:40px;">
+      <div class="label">The Premise</div>
+      <h2>The <em>Blurb</em></h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="reveal reveal-delay-1">
+      <p><strong style="color:var(--ink-primary);">Jessica "Jess" Park</strong> (28) is the cynical producer of "Ghost Bros," a paranormal investigation channel circling the drain. She's brilliant at what she does — reads analytics like scripture, scripts every jump scare, buys props at thrift stores. She's also a thief: every ghost in their archive is fabricated, every EVP stolen from real 911 calls she never credited.</p>
+      <p><strong style="color:var(--ink-primary);">Marcus Reyes</strong> (26) is the earnest heart of the show — the one who cries on camera, who feels cold spots, who genuinely believes in the paranormal despite never experiencing it. He's leaving the channel to become a dental hygienist because "at least mouths are honest."</p>
+      <p>For their final episode, they break into St. Mary's Hospital. The plan: one fabricated haunting, one viral video, one clean exit. But the hospital has other plans. The dead don't want revenge. They want <em>content</em> — and they'll hold the stream hostage until Jess and Marcus give them the one thing they never faked: <strong>the truth.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- Characters -->
+<section class="characters-section" id="characters">
+  <div class="section-header reveal">
+    <div class="label">The Cast</div>
+    <h2>Charac<em>ters</em></h2>
+    <div class="section-divider"></div>
+  </div>
+  <div class="character-grid">
+    <div class="character-card reveal reveal-delay-1">
+      <img src="characters/marcus.png" alt="Marcus Reyes Reference Sheet" class="char-image">
+      <div class="char-info">
+        <div class="char-name">Marcus Reyes</div>
+        <div class="char-role">Age 26 &middot; The Heart</div>
+        <div class="char-desc">Earnest, anxious, and genuinely believes in the paranormal despite having never experienced it. He's the one who cries in episodes, who "feels cold spots," who wants to help lost souls. His sincerity makes him the moral compass Jess ignores until it's almost too late. Leaving the channel to become a dental hygienist because "at least mouths are honest."</div>
+      </div>
+    </div>
+    <div class="character-card reveal reveal-delay-2">
+      <img src="characters/jessica.png" alt="Jessica Park Reference Sheet" class="char-image">
+      <div class="char-info">
+        <div class="char-name">Jessica "Jess" Park</div>
+        <div class="char-role">Age 28 &middot; The Brain</div>
+        <div class="char-desc">The face and producer of "Ghost Bros." Cynical, exhausted, and dangerously clever. Jess treats haunting like content strategy — what gets clicks, what gets retention, what gets sponsors. Beneath the armor of irony is a genuinely guilty conscience she's buried so deep she needs a ghost to dig it up. Wears her own merch under a thrifted bomber jacket.</div>
+      </div>
+    </div>
+    <div class="character-card reveal reveal-delay-3">
+      <img src="characters/officer_dunn.png" alt="Officer Dunn Reference Sheet" class="char-image">
+      <div class="char-info">
+        <div class="char-name">Officer Dunn</div>
+        <div class="char-role">Age 50s &middot; The Ghost</div>
+        <div class="char-desc">A security guard who patrols the hospital. Friendly, out-of-date, offers them coffee from a thermos that pours dust. He mentions his wife, his dog, and the "new patients" with the same cheery tone. Walks through a solid door mid-conversation. The audience notices before the characters do.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Storyboard -->
+<section class="storyboard-section" id="storyboard">
+  <div class="section-header reveal">
+    <div class="label">The Vision</div>
+    <h2>Story<em>board</em></h2>
+    <div class="section-divider"></div>
+  </div>
+
+  <!-- Scene 1 -->
+  <div class="scene-group reveal">
+    <div class="scene-header">
+      <span class="scene-number">Scene 01</span>
+      <span class="scene-title">The Arrival</span>
+      <span class="scene-location">EXT. St. Mary's Hospital — Night</span>
+    </div>
+    <p class="scene-desc">Jess and Marcus arrive. Banter establishes their dynamic: she's cynical, he's earnest. They argue about vertical vs horizontal. Marcus reveals this is his last video. Jess hides how much this stings by being cruel about his beanie.</p>
+    <div class="panel-grid">
+      <div class="panel-item" onclick="openLightbox('storyboard/s01_p01.png')"><img src="storyboard/s01_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> Establishing shot — St. Mary's Hospital looms against a moonless sky.</div></div>
+      <div class="panel-item" onclick="openLightbox('storyboard/s01_p02.png')"><img src="storyboard/s01_p02.png" alt="Panel 2"><div class="panel-caption"><strong>2.</strong> Jess checks her phone. Marcus wrestles with gear. Opposing energies.</div></div>
+      <div class="panel-item" onclick="openLightbox('storyboard/s01_p03.png')"><img src="storyboard/s01_p03.png" alt="Panel 3"><div class="panel-caption"><strong>3.</strong> The argument — his enthusiasm crumples against her wall of irony.</div></div>
+      <div class="panel-item" onclick="openLightbox('storyboard/s01_p04.png')"><img src="storyboard/s01_p04.png" alt="Panel 4"><div class="panel-caption"><strong>4.</strong> She swats his hand, rotates the camera to vertical herself.</div></div>
+      <div class="panel-item" onclick="openLightbox('storyboard/s01_p05.png')"><img src="storyboard/s01_p05.png" alt="Panel 5"><div class="panel-caption"><strong>5.</strong> Marcus looks down. "This is my last video." Vulnerability.</div></div>
+      <div class="panel-item" onclick="openLightbox('storyboard/s01_p06.png')"><img src="storyboard/s01_p06.png" alt="Panel 6"><div class="panel-caption"><strong>6.</strong> Jess's smirk freezes. One frame of hurt before she catches it.</div></div>
+      <div class="panel-item" onclick="openLightbox('storyboard/s01_p07.png')"><img src="storyboard/s01_p07.png" alt="Panel 7"><div class="panel-caption"><strong>7.</strong> She flicks his beanie pom-pom. Cruel deflection. He recoils.</div></div>
+      <div class="panel-item" onclick="openLightbox('storyboard/s01_p08.png')"><img src="storyboard/s01_p08.png" alt="Panel 8"><div class="panel-caption"><strong>8.</strong> They walk toward the ER. She's ahead. He trails, slumped.</div></div>
+    </div>
+  </div>
+
+  <!-- Scene 2 -->
+  <div class="scene-group reveal">
+    <div class="scene-header">
+      <span class="scene-number">Scene 02</span>
+      <span class="scene-title">BEHIND YOU</span>
+      <span class="scene-location">INT. Lobby — Night</span>
+    </div>
+    <p class="scene-desc">They set up. Jess mocks the EMF reader. Marcus arranges LED candles into a protective circle. They test the EVP app. It says "BEHIND YOU." They laugh. Nothing is behind them. Yet.</p>
+    <div class="panel-grid">
+      <div class="panel-item" onclick="openLightbox('storyboard/s02_p01.png')"><img src="storyboard/s02_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> Jess mocks the EMF reader. Marcus arranges the candle circle.</div></div>
+      <div class="panel-item" onclick="openLightbox('storyboard/s02_p02.png')"><img src="storyboard/s02_p02.png" alt="Panel 2"><div class="panel-caption"><strong>2.</strong> The phone glows: "BEHIND YOU." They laugh together. Her armor cracks.</div></div>
+      <div class="panel-item" onclick="openLightbox('storyboard/s02_p03.png')"><img src="storyboard/s02_p03.png" alt="Panel 3"><div class="panel-caption"><strong>3.</strong> Same space, pulled back. Nothing behind them. One candle dies.</div></div>
+    </div>
+  </div>
+
+  <!-- Scene 3 -->
+  <div class="scene-group reveal">
+    <div class="scene-header">
+      <span class="scene-number">Scene 03</span>
+      <span class="scene-title">Not On Cue</span>
+      <span class="scene-location">INT. East Wing Hallway — Night</span>
+    </div>
+    <p class="scene-desc">They start the livestream. View count: 12. Jess introduces "the most haunted room." A door slams. Jess cues the app. Another door slams. Not on cue.</p>
+    <div class="panel-grid two">
+      <div class="panel-item" onclick="openLightbox('storyboard/s03_p01.png')"><img src="storyboard/s03_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> The performance — 12 viewers. She's producing, he's performing.</div></div>
+      <div class="panel-item" onclick="openLightbox('storyboard/s03_p02.png')"><img src="storyboard/s03_p02.png" alt="Panel 2"><div class="panel-caption"><strong>2.</strong> Two doors slam simultaneously. The app-cued one AND a real one.</div></div>
+    </div>
+  </div>
+
+  <!-- Scene 4 -->
+  <div class="scene-group reveal">
+    <div class="scene-header">
+      <span class="scene-number">Scene 04</span>
+      <span class="scene-title">The Origami Crane</span>
+      <span class="scene-location">INT. Patient Room 304 — Night</span>
+    </div>
+    <p class="scene-desc">They perform the Sheet Pull. Fishing line yanks the sheet. They celebrate. Then the sheet levitates, folds into an origami crane, and lands in Marcus's lap. View count: 4,000. They don't know how.</p>
+    <div class="panel-grid">
+      <div class="panel-item" onclick="openLightbox('storyboard/s04_p01.png')"><img src="storyboard/s04_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> The con — fishing line yanks the sheet. They celebrate.</div></div>
+      <div class="panel-item" onclick="openLightbox('storyboard/s04_p02.png')"><img src="storyboard/s04_p02.png" alt="Panel 2"><div class="panel-caption"><strong>2.</strong> The sheet hovers. Begins folding itself. The fishing line hangs limp.</div></div>
+      <div class="panel-item" onclick="openLightbox('storyboard/s04_p03.png')"><img src="storyboard/s04_p03.png" alt="Panel 3"><div class="panel-caption"><strong>3.</strong> A perfect origami crane in Marcus's lap. Phone: 4,000 viewers.</div></div>
+    </div>
+  </div>
+
+  <!-- Scene 5 -->
+  <div class="scene-group reveal">
+    <div class="scene-header">
+      <span class="scene-number">Scene 05</span>
+      <span class="scene-title">Margaret K.</span>
+      <span class="scene-location">INT. East Wing Hallway — Night</span>
+    </div>
+    <p class="scene-desc">Jess checks comments. "Nice trick. Used the same line on my house. Episode 7. — Margaret K." Jess goes pale. Margaret K. was the Weeping Widow. She was real. She died.</p>
+    <div class="panel-grid">
+      <div class="panel-item" onclick="openLightbox('storyboard/s05_p01.png')"><img src="storyboard/s05_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> Jess scrolling comments with a lazy smirk. Still in producer mode.</div></div>
+      <div class="panel-item" onclick="openLightbox('storyboard/s05_p03.png')"><img src="storyboard/s05_p03.png" alt="Panel 2"><div class="panel-caption"><strong>2.</strong> Split-panel: her face drained of color + the comment from Margaret K.</div></div>
+    </div>
+  </div>
+
+  <!-- Scene 6 -->
+  <div class="scene-group reveal">
+    <div class="scene-header">
+      <span class="scene-number">Scene 06</span>
+      <span class="scene-title">Officer Dunn</span>
+      <span class="scene-location">INT. Hallway — Night</span>
+    </div>
+    <p class="scene-desc">Officer Dunn appears. Friendly, asks about their project, warns about the East wing. Offers coffee. Pours dust. Compliments their costumes. Walks through a door. Neither saw the door.</p>
+    <div class="panel-grid two">
+      <div class="panel-item" onclick="openLightbox('storyboard/s06_p01.png')"><img src="storyboard/s06_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> Dunn offers coffee. Dust and dead flies pour from the thermos.</div></div>
+      <div class="panel-item" onclick="openLightbox('storyboard/s06_p02.png')"><img src="storyboard/s06_p02.png" alt="Panel 2"><div class="panel-caption"><strong>2.</strong> Dunn walks through a solid door. "Nice guy." Neither saw it.</div></div>
+    </div>
+  </div>
+
+  <!-- Scene 7 -->
+  <div class="scene-group reveal">
+    <div class="scene-header">
+      <span class="scene-number">Scene 07</span>
+      <span class="scene-title">HELP</span>
+      <span class="scene-location">INT. Chapel — Night</span>
+    </div>
+    <p class="scene-desc">They retreat to plan. The radio crackles. A 911 call plays — the Dover Street suicide. Jess never published the audio. She stole it. The candles spell HELP in Morse code. View count: 500,000.</p>
+    <div class="panel-grid">
+      <div class="panel-item" onclick="openLightbox('storyboard/s07_p01.png')"><img src="storyboard/s07_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> The retreat. Radio crackles with blue static between them on a pew.</div></div>
+      <div class="panel-item" onclick="openLightbox('storyboard/s07_p02.png')"><img src="storyboard/s07_p02.png" alt="Panel 2"><div class="panel-caption"><strong>2.</strong> Split-panel: Marcus's betrayal realization + Jess's guilt.</div></div>
+      <div class="panel-item" onclick="openLightbox('storyboard/s07_p03.png')"><img src="storyboard/s07_p03.png" alt="Panel 3"><div class="panel-caption"><strong>3.</strong> Overhead: candles spell HELP in Morse. Phone: 500,000 viewers.</div></div>
+    </div>
+  </div>
+
+  <!-- Scene 8 -->
+  <div class="scene-group reveal">
+    <div class="scene-header">
+      <span class="scene-number">Scene 08</span>
+      <span class="scene-title">The Wall</span>
+      <span class="scene-location">INT. Basement — Night</span>
+    </div>
+    <p class="scene-desc">They find the records room. Every face they fabricated, circled. A PA voice speaks: "You made us stories. Stories last longer than people. Now we're your canon." The EMF reader melts. Jess tries to end the stream. The button doesn't work.</p>
+    <div class="panel-grid two">
+      <div class="panel-item" onclick="openLightbox('storyboard/s08_p01.png')"><img src="storyboard/s08_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> The wall of fabricated ghost faces — all circled in red marker.</div></div>
+      <div class="panel-item" onclick="openLightbox('storyboard/s08_p02.png')"><img src="storyboard/s08_p02.png" alt="Panel 2"><div class="panel-caption"><strong>2.</strong> Split-panel: "It won't stop" + the EMF reader melting like wax.</div></div>
+    </div>
+  </div>
+
+  <!-- Scene 9 -->
+  <div class="scene-group reveal">
+    <div class="scene-header">
+      <span class="scene-number">Scene 09</span>
+      <span class="scene-title">The Rules</span>
+      <span class="scene-location">INT. Basement — Night</span>
+    </div>
+    <p class="scene-desc">The rules are explained. They are live. The stream will not end until audience retention drops. The audience is dead. The dead have excellent retention. The only way out is content they actually want.</p>
+    <div class="panel-grid two">
+      <div class="panel-item" onclick="openLightbox('storyboard/s09_p01.png')"><img src="storyboard/s09_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> Dozens of ghostly figures fill the room, all holding glowing phones.</div></div>
+      <div class="panel-item" onclick="openLightbox('storyboard/s09_p02.png')"><img src="storyboard/s09_p02.png" alt="Panel 2"><div class="panel-caption"><strong>2.</strong> Split-panel: retention locked at 100% + "The only way out is content."</div></div>
+    </div>
+  </div>
+
+  <!-- Scene 10 -->
+  <div class="scene-group reveal">
+    <div class="scene-header">
+      <span class="scene-number">Scene 10</span>
+      <span class="scene-title">The Loop</span>
+      <span class="scene-location">INT. East Wing Hallway — Night</span>
+    </div>
+    <p class="scene-desc">Marcus tries to escape. The hallway loops. He runs past the same origami crane seven times. Jess tries to reason with the ghosts via chat. They respond with her own analytics. "Your CTR peaks at 2:34. We're not leaving at 2:34."</p>
+    <div class="panel-grid">
+      <div class="panel-item" onclick="openLightbox('storyboard/s10_p01.png')"><img src="storyboard/s10_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> Escher-like hallway loop. Seven translucent Marcuses pass the same crane.</div></div>
+      <div class="panel-item" onclick="openLightbox('storyboard/s10_p02.png')"><img src="storyboard/s10_p02.png" alt="Panel 2"><div class="panel-caption"><strong>2.</strong> Jess pleads into the camera. Ghostly comment bubbles float around her.</div></div>
+      <div class="panel-item" onclick="openLightbox('storyboard/s10_p03.png')"><img src="storyboard/s10_p03.png" alt="Panel 3"><div class="panel-caption"><strong>3.</strong> "Your CTR peaks at 2:34. We're not leaving at 2:34."</div></div>
+    </div>
+  </div>
+
+  <!-- Scene 11 -->
+  <div class="scene-group reveal">
+    <div class="scene-header">
+      <span class="scene-number">Scene 11</span>
+      <span class="scene-title">Margaret K.</span>
+      <span class="scene-location">INT. Patient Room 304 — Night</span>
+    </div>
+    <p class="scene-desc">A single ghost manifests: Margaret K., the Weeping Widow. Not weeping. Furious. She wants Jess to say her husband's name correctly. "You didn't even spell my name right in the thumbnail."</p>
+    <div class="panel-grid single">
+      <div class="panel-item" onclick="openLightbox('storyboard/s11_p01.png')"><img src="storyboard/s11_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> Margaret K. manifests — furious, not weeping. "You didn't even spell my name right."</div></div>
+    </div>
+  </div>
+
+  <!-- Scene 12 -->
+  <div class="scene-group reveal">
+    <div class="scene-header">
+      <span class="scene-number">Scene 12</span>
+      <span class="scene-title">The Collective</span>
+      <span class="scene-location">INT. Chapel — Night</span>
+    </div>
+    <p class="scene-desc">The Collective fully manifests. Ordinary people. Some in hospital gowns, some in the clothes they died in. Sarcastic, tired, deeply unimpressed. "We've seen your acting. This is better, but you're still overplaying it."</p>
+    <div class="panel-grid single">
+      <div class="panel-item" onclick="openLightbox('storyboard/s12_p01.png')"><img src="storyboard/s12_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> The pews filled with ghostly figures — bored audience at a bad play.</div></div>
+    </div>
+  </div>
+
+  <!-- Scene 13 -->
+  <div class="scene-group reveal">
+    <div class="scene-header">
+      <span class="scene-number">Scene 13</span>
+      <span class="scene-title">The Real Apology</span>
+      <span class="scene-location">INT. Chapel — Night</span>
+    </div>
+    <p class="scene-desc">Jess tries to argue semantics. Marcus steps between them. He apologizes first — for every tear he faked, every prayer he performed for content, every family he let Jess exploit.</p>
+    <div class="panel-grid single">
+      <div class="panel-item" onclick="openLightbox('storyboard/s13_p01.png')"><img src="storyboard/s13_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> Marcus steps forward, tears streaming. "I'm sorry. For every tear I faked."</div></div>
+    </div>
+  </div>
+
+  <!-- Scene 14 -->
+  <div class="scene-group reveal">
+    <div class="scene-header">
+      <span class="scene-number">Scene 14</span>
+      <span class="scene-title">The Confession</span>
+      <span class="scene-location">INT. Chapel — Night</span>
+    </div>
+    <p class="scene-desc">Jess breaks. She confesses live. Every real name. Every stolen obituary. Every family she never contacted, every correction she ignored. She doesn't ask for forgiveness. She just names them. The view count drops.</p>
+    <div class="panel-grid single">
+      <div class="panel-item" onclick="openLightbox('storyboard/s14_p01.png')"><img src="storyboard/s14_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> Jess slumped in a plastic chair, naming them all. The view count drops.</div></div>
+    </div>
+  </div>
+
+  <!-- Scene 15 -->
+  <div class="scene-group reveal">
+    <div class="scene-header">
+      <span class="scene-number">Scene 15</span>
+      <span class="scene-title">Silence</span>
+      <span class="scene-location">INT. Chapel — Night</span>
+    </div>
+    <p class="scene-desc">The ghosts fade. Not happy. Just... done. The door unlocks with a mechanical click. The livestream ends. The phones go dark. Silence.</p>
+    <div class="panel-grid single">
+      <div class="panel-item" onclick="openLightbox('storyboard/s15_p01.png')"><img src="storyboard/s15_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> Empty chapel. Fading wisps. CLICK. Offline. Just paper now.</div></div>
+    </div>
+  </div>
+
+  <!-- Scene 16 -->
+  <div class="scene-group reveal">
+    <div class="scene-header">
+      <span class="scene-number">Scene 16</span>
+      <span class="scene-title">The Destruction</span>
+      <span class="scene-location">EXT. Parking Lot — Dawn</span>
+    </div>
+    <p class="scene-desc">They stumble out into gray morning. Jess deletes the video, the channel, the app. She crushes the phone under her heel. They laugh. Ugly, relieved, broken laughter.</p>
+    <div class="panel-grid two">
+      <div class="panel-item" onclick="openLightbox('storyboard/s16_p01.png')"><img src="storyboard/s16_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> Gray dawn. The streetlight is off. They stumble toward the running car.</div></div>
+      <div class="panel-item" onclick="openLightbox('storyboard/s16_p02.png')"><img src="storyboard/s16_p02.png" alt="Panel 2"><div class="panel-caption"><strong>2.</strong> Boot mid-stomp. Phone shatters. Ugly broken laughter. Healing.</div></div>
+    </div>
+  </div>
+
+  <!-- Scene 17 -->
+  <div class="scene-group reveal">
+    <div class="scene-header">
+      <span class="scene-number">Scene 17</span>
+      <span class="scene-title">Good One, Algorithm</span>
+      <span class="scene-location">INT. Marcus's Car — Dawn</span>
+    </div>
+    <p class="scene-desc">Driving away. Hospital shrinks in the rearview. Marcus checks backup phone. Push notification: "Ghost Bros is TRENDING." He laughs. "Good one, algorithm."</p>
+    <div class="panel-grid single">
+      <div class="panel-item" onclick="openLightbox('storyboard/s17_p02.png')"><img src="storyboard/s17_p02.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> Behind-the-driver shot. Notification floating: "Ghost Bros is TRENDING!"</div></div>
+    </div>
+  </div>
+
+  <!-- Scene 18 -->
+  <div class="scene-group reveal">
+    <div class="scene-header">
+      <span class="scene-number">Scene 18</span>
+      <span class="scene-title">Not A Joke</span>
+      <span class="scene-location">INT. Marcus's Car — Dawn</span>
+    </div>
+    <p class="scene-desc">It's not a joke. The channel exists. New logo. Better editing. The confession is gone. The "real haunting" is live, cut for maximum suspense. Subscribers: 10 million and climbing.</p>
+    <div class="panel-grid single">
+      <div class="panel-item" onclick="openLightbox('storyboard/s18_p01.png')"><img src="storyboard/s18_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> Phone screen dominates: new logo, horror edit, 10,000,000+ subscribers.</div></div>
+    </div>
+  </div>
+
+  <!-- Scene 19 -->
+  <div class="scene-group reveal">
+    <div class="scene-header">
+      <span class="scene-number">Scene 19</span>
+      <span class="scene-title">We Know You</span>
+      <span class="scene-location">INT. Marcus's Car — Dawn</span>
+    </div>
+    <p class="scene-desc">Jess grabs the phone. Tries to delete. The account regenerates. Tries to report. The report button thanks her for the engagement. Tries to log out. The password is her mother's maiden name. She never used that password. A new comment: "We know you."</p>
+    <div class="panel-grid two">
+      <div class="panel-item" onclick="openLightbox('storyboard/s19_p01.png')"><img src="storyboard/s19_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> Delete button regenerates. Report becomes "Thanks for your engagement!"</div></div>
+      <div class="panel-item" onclick="openLightbox('storyboard/s19_p02.png')"><img src="storyboard/s19_p02.png" alt="Panel 2"><div class="panel-caption"><strong>2.</strong> Password: her mother's maiden name. Comment: "We know you."</div></div>
+    </div>
+  </div>
+
+  <!-- Scene 20 -->
+  <div class="scene-group reveal">
+    <div class="scene-header">
+      <span class="scene-number">Scene 20</span>
+      <span class="scene-title">The Breaking Point</span>
+      <span class="scene-location">EXT. Roadside — Dawn</span>
+    </div>
+    <p class="scene-desc">They pull over. Jess screams into the empty field. Marcus cries. The phone, sitting on the dashboard, dings. Another million. Then another.</p>
+    <div class="panel-grid single">
+      <div class="panel-item" onclick="openLightbox('storyboard/s20_p01.png')"><img src="storyboard/s20_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> Jess screams over the hood. Marcus sobs in the car. Phone dings: 1M, then 2M.</div></div>
+    </div>
+  </div>
+
+  <!-- Scene 21 -->
+  <div class="scene-group reveal">
+    <div class="scene-header">
+      <span class="scene-number">Scene 21</span>
+      <span class="scene-title">Never Out</span>
+      <span class="scene-location">EXT. Hospital Parking Lot — Dawn</span>
+    </div>
+    <p class="scene-desc">They drive back. The hospital is gone. Just an empty lot and one buzzing streetlight. But the livestream is still active. Background: the parking lot. They are still in the frame. They were never out.</p>
+    <div class="panel-grid single">
+      <div class="panel-item" onclick="openLightbox('storyboard/s21_p01.png')"><img src="storyboard/s21_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> Hospital gone. Phone livestream shows the parking lot — with them in it.</div></div>
+    </div>
+  </div>
+
+  <!-- Scene 22 -->
+  <div class="scene-group reveal">
+    <div class="scene-header">
+      <span class="scene-number">Scene 22</span>
+      <span class="scene-title">The Stream Never Ends</span>
+      <span class="scene-location">EXT. Hospital Parking Lot — Dawn</span>
+    </div>
+    <p class="scene-desc">A thousand phones materialize in the gray air. Held by invisible hands. Every screen shows Ghost Bros. Every screen shows their faces. The view count is now just a symbol: the infinity loop.</p>
+    <div class="panel-grid single">
+      <div class="panel-item" onclick="openLightbox('storyboard/s22_p01.png')"><img src="storyboard/s22_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> Thousands of phones in the sky. Infinity symbol for a view count. The end.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Notes -->
+<section class="notes-section" id="notes">
+  <div class="section-header reveal" style="padding-top:0;">
+    <div class="label">Production</div>
+    <h2>Director's <em>Notes</em></h2>
+    <div class="section-divider"></div>
+  </div>
+  <div class="notes-content">
+    <div class="reveal reveal-delay-1">
+      <h3>Visual Language</h3>
+      <p>The aesthetic is <strong>Studio Ghibli meets indie comic</strong> — watercolor-textured flats with soft ink outlines, slightly melancholic, gentle muted palette. This isn't photorealistic horror. The ghosts are warm. The hospital is institutional and faded. The horror lives in implication, not jump scares.</p>
+
+      <h3>Character Design</h3>
+      <p>All three character reference sheets and 45 storyboard panels were generated via <strong>Higgsfield AI</strong> using Soul 2.0 for single-character close-ups and GPT Image 2 for multi-character compositions. Character consistency was maintained through Soul IDs and image references.</p>
+
+      <h3>Sound & Music</h3>
+      <p>The score should feel like a <strong>lo-fi hip-hop horror soundtrack</strong> — 85-90 BPM, melancholic piano loops with subtle vinyl crackle. No orchestral stings. The ghosts don't need dramatic music. The phone notification ding is the scariest sound in the film.</p>
+
+      <h3>Key Tags</h3>
+      <p>
+        <span class="note-tag">Horror-Comedy</span>
+        <span class="note-tag">Found Footage</span>
+        <span class="note-tag">Social Commentary</span>
+        <span class="note-tag">Indie Animation</span>
+        <span class="note-tag">Supernatural</span>
+        <span class="note-tag">Content Creator Satire</span>
+        <span class="note-tag">22 Scenes</span>
+        <span class="note-tag">45 Panels</span>
+      </p>
+
+      <h3 style="margin-top:48px;">Final Frame</h3>
+      <p style="font-family:var(--font-display); font-size:18px; font-style:italic; color:var(--ink-secondary);">There is no Scene 23. There is only the stream. <span style="color:var(--accent-ghost);">&infin;</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <p class="endmark">Ghost Bros. — Storyboard by Higgsfield AI &middot; 2026</p>
+  <p class="infinity">&infin;</p>
+</footer>
+
+<script>
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+reveals.forEach(el => observer.observe(el));
+
+// Navbar background on scroll
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 80) {
+    navbar.classList.add('scrolled');
+  } else {
+    navbar.classList.remove('scrolled');
+  }
+});
+
+// Lightbox
+function openLightbox(src) {
+  const box = document.getElementById('lightbox');
+  const img = document.getElementById('lightbox-img');
+  img.src = src;
+  box.classList.add('active');
+}
+
+// Keyboard: Escape closes lightbox, arrow keys could navigate
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    document.getElementById('lightbox').classList.remove('active');
+  }
+});
+</script>
+
+</body>
+</html>
