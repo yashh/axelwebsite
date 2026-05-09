@@ -437,9 +437,38 @@
     line-height: 1.7;
     color: var(--ink-secondary);
     max-width: 800px;
-    margin: 0 40px 32px;
+    margin: 0 40px 20px;
     padding-left: 0;
     font-style: italic;
+  }
+  .dialogue-block {
+    max-width: 800px;
+    margin: 0 40px 32px;
+    padding: 24px 28px;
+    background: rgba(18, 18, 36, 0.5);
+    border-left: 2px solid var(--accent-rust);
+    font-size: 14px;
+    line-height: 1.8;
+  }
+  .dialogue-block .char {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--accent-rust);
+    margin-top: 16px;
+    display: block;
+  }
+  .dialogue-block .char:first-child { margin-top: 0; }
+  .dialogue-block .line {
+    color: var(--ink-secondary);
+    margin-bottom: 4px;
+  }
+  .dialogue-block .action {
+    font-style: italic;
+    color: var(--ink-muted);
+    margin: 10px 0;
+    display: block;
   }
   .panel-grid {
     display: grid;
@@ -556,10 +585,11 @@
   @media (max-width: 768px) {
     nav { padding: 16px 20px; }
     nav .nav-links { display: none; }
-    .container, .character-grid, .panel-grid, .scene-header, .scene-desc {
+    .container, .character-grid, .panel-grid, .scene-header, .scene-desc, .dialogue-block {
       padding-left: 20px;
       padding-right: 20px;
     }
+    .dialogue-block { margin-left: 20px; margin-right: 20px; padding: 20px; }
     .panel-grid.two { grid-template-columns: 1fr; }
     .character-grid { grid-template-columns: 1fr; }
     .hero h1 { font-size: 42px; }
@@ -705,6 +735,20 @@
       <span class="scene-location">EXT. St. Mary's Hospital — Night</span>
     </div>
     <p class="scene-desc">Jess and Marcus arrive. Banter establishes their dynamic: she's cynical, he's earnest. They argue about vertical vs horizontal. Marcus reveals this is his last video. Jess hides how much this stings by being cruel about his beanie.</p>
+    <div class="dialogue-block">
+      <span class="char">Jess</span>
+      <span class="line">"Vertical. We're doing vertical."</span>
+      <span class="char">Marcus</span>
+      <span class="line">"But the landscape — people watch on laptops, Jess —"</span>
+      <span class="char">Jess</span>
+      <span class="line">"Marcus. No one watches landscape on a toilet. Vertical gets forty percent more completion. It's science."</span>
+      <span class="char">Marcus</span>
+      <span class="line">"This is my last video, Jess. I'm going to dental hygienist school."</span>
+      <span class="action">She freezes for one frame. Then the armor slams back down.</span>
+      <span class="char">Jess</span>
+      <span class="line">"At least mouths are honest. And at least take that off. You look like a blueberry had a miscarriage."</span>
+      <span class="action">She flicks his beanie pom-pom. He recoils. They walk toward the ER. She's ahead. He trails, slumped.</span>
+    </div>
     <div class="panel-grid">
       <div class="panel-item" onclick="openLightbox('storyboard/s01_p01.png')"><img src="storyboard/s01_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> Establishing shot — St. Mary's Hospital looms against a moonless sky.</div></div>
       <div class="panel-item" onclick="openLightbox('storyboard/s01_p02.png')"><img src="storyboard/s01_p02.png" alt="Panel 2"><div class="panel-caption"><strong>2.</strong> Jess checks her phone. Marcus wrestles with gear. Opposing energies.</div></div>
@@ -725,6 +769,25 @@
       <span class="scene-location">INT. Lobby — Night</span>
     </div>
     <p class="scene-desc">They set up. Jess mocks the EMF reader. Marcus arranges LED candles into a protective circle. They test the EVP app. It says "BEHIND YOU." They laugh. Nothing is behind them. Yet.</p>
+    <div class="dialogue-block">
+      <span class="char">Jess</span>
+      <span class="line">"Behold. The Ghost Bros EMF Reader. Twelve dollars on Amazon. One LED. A sticker that says 'PROFESSIONAL.'"</span>
+      <span class="char">Marcus</span>
+      <span class="line">"It has good reviews."</span>
+      <span class="char">Jess</span>
+      <span class="line">"The reviews are from people who bought it for their six-year-olds."</span>
+      <span class="action">Marcus arranges six LED candles into a "protective circle." He takes this seriously. Jess doesn't.</span>
+      <span class="char">Marcus</span>
+      <span class="line">"Okay, testing the EVP app..."</span>
+      <span class="action">The phone glows. A robotic voice: "BEHIND YOU."</span>
+      <span class="char">Jess</span>
+      <span class="line">"Did you program that?"</span>
+      <span class="char">Marcus</span>
+      <span class="line">"No. It's random. It's a four-ninety-nine app called GhostTalkz."</span>
+      <span class="char">Jess</span>
+      <span class="line">"I wish I was that clever."</span>
+      <span class="action">They laugh. Same space, pulled back. Nothing behind them. One candle dies. Neither notices.</span>
+    </div>
     <div class="panel-grid">
       <div class="panel-item" onclick="openLightbox('storyboard/s02_p01.png')"><img src="storyboard/s02_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> Jess mocks the EMF reader. Marcus arranges the candle circle.</div></div>
       <div class="panel-item" onclick="openLightbox('storyboard/s02_p02.png')"><img src="storyboard/s02_p02.png" alt="Panel 2"><div class="panel-caption"><strong>2.</strong> The phone glows: "BEHIND YOU." They laugh together. Her armor cracks.</div></div>
@@ -740,6 +803,22 @@
       <span class="scene-location">INT. East Wing Hallway — Night</span>
     </div>
     <p class="scene-desc">They start the livestream. View count: 12. Jess introduces "the most haunted room." A door slams. Jess cues the app. Another door slams. Not on cue.</p>
+    <div class="dialogue-block">
+      <span class="char">Jess</span>
+      <span class="line">"Welcome back to Ghost Bros. Tonight we're at St. Mary's, the most haunted hospital in the state. I'm Jess."</span>
+      <span class="char">Marcus</span>
+      <span class="line">"And I'm Marcus. And I can already feel the energy."</span>
+      <span class="action">He fake-shivers. Twelve viewers. Mostly bots.</span>
+      <span class="action">A door slams down the hall.</span>
+      <span class="char">Jess</span>
+      <span class="line">"Did you hear that?"</span>
+      <span class="action">She cues the app with a hidden foot-tap. Another door slams — simultaneously, from the opposite direction. Not on cue.</span>
+      <span class="char">Marcus</span>
+      <span class="line">"That wasn't me."</span>
+      <span class="char">Jess</span>
+      <span class="line">"It's the wind. Old building. Keep rolling."</span>
+      <span class="action">But she checks the app. It wasn't the app.</span>
+    </div>
     <div class="panel-grid two">
       <div class="panel-item" onclick="openLightbox('storyboard/s03_p01.png')"><img src="storyboard/s03_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> The performance — 12 viewers. She's producing, he's performing.</div></div>
       <div class="panel-item" onclick="openLightbox('storyboard/s03_p02.png')"><img src="storyboard/s03_p02.png" alt="Panel 2"><div class="panel-caption"><strong>2.</strong> Two doors slam simultaneously. The app-cued one AND a real one.</div></div>
@@ -754,6 +833,19 @@
       <span class="scene-location">INT. Patient Room 304 — Night</span>
     </div>
     <p class="scene-desc">They perform the Sheet Pull. Fishing line yanks the sheet. They celebrate. Then the sheet levitates, folds into an origami crane, and lands in Marcus's lap. View count: 4,000. They don't know how.</p>
+    <div class="dialogue-block">
+      <span class="char">Jess</span>
+      <span class="line">"Patient Room 304. This is where the orderly saw the woman in white. On three. One... two..."</span>
+      <span class="action">Fishing line yanks the sheet clean off the bed. Perfect execution.</span>
+      <span class="char">Jess</span>
+      <span class="line">"And CUT. That is how you make content, Marcus."</span>
+      <span class="action">The sheet hovers three feet off the ground. The fishing line hangs limp. Then it begins folding itself — precise, deliberate, origami. A perfect crane floats across the room and lands in Marcus's lap.</span>
+      <span class="char">Marcus</span>
+      <span class="line">"Jess. How many viewers?"</span>
+      <span class="char">Jess</span>
+      <span class="line">"Four thousand. Marcus, we only have twelve subscribers."</span>
+      <span class="action">The crane's paper wings flutter. No wind.</span>
+    </div>
     <div class="panel-grid">
       <div class="panel-item" onclick="openLightbox('storyboard/s04_p01.png')"><img src="storyboard/s04_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> The con — fishing line yanks the sheet. They celebrate.</div></div>
       <div class="panel-item" onclick="openLightbox('storyboard/s04_p02.png')"><img src="storyboard/s04_p02.png" alt="Panel 2"><div class="panel-caption"><strong>2.</strong> The sheet hovers. Begins folding itself. The fishing line hangs limp.</div></div>
@@ -769,6 +861,23 @@
       <span class="scene-location">INT. East Wing Hallway — Night</span>
     </div>
     <p class="scene-desc">Jess checks comments. "Nice trick. Used the same line on my house. Episode 7. — Margaret K." Jess goes pale. Margaret K. was the Weeping Widow. She was real. She died.</p>
+    <div class="dialogue-block">
+      <span class="action">Jess scrolls comments with a lazy smirk. Still in producer mode.</span>
+      <span class="char">Comment — Margaret K.</span>
+      <span class="line">"Nice trick. Used the same line on my house. Episode 7. — Margaret K."</span>
+      <span class="action">The blood drains from Jess's face. She stops walking.</span>
+      <span class="char">Marcus</span>
+      <span class="line">"What is it?"</span>
+      <span class="char">Jess</span>
+      <span class="line">"Margaret K. She was real. She died."</span>
+      <span class="char">Marcus</span>
+      <span class="line">"What are you talking about?"</span>
+      <span class="char">Jess</span>
+      <span class="line">"The Weeping Widow. I made her up. But she was real. I used her real obituary. I used her real name."</span>
+      <span class="char">Marcus</span>
+      <span class="line">"You used real people? Real names? Jess, you told me they were all fake."</span>
+      <span class="action">Another comment pops up. Then another. All from names she recognizes.</span>
+    </div>
     <div class="panel-grid">
       <div class="panel-item" onclick="openLightbox('storyboard/s05_p01.png')"><img src="storyboard/s05_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> Jess scrolling comments with a lazy smirk. Still in producer mode.</div></div>
       <div class="panel-item" onclick="openLightbox('storyboard/s05_p03.png')"><img src="storyboard/s05_p03.png" alt="Panel 2"><div class="panel-caption"><strong>2.</strong> Split-panel: her face drained of color + the comment from Margaret K.</div></div>
@@ -783,6 +892,23 @@
       <span class="scene-location">INT. Hallway — Night</span>
     </div>
     <p class="scene-desc">Officer Dunn appears. Friendly, asks about their project, warns about the East wing. Offers coffee. Pours dust. Compliments their costumes. Walks through a door. Neither saw the door.</p>
+    <div class="dialogue-block">
+      <span class="char">Officer Dunn</span>
+      <span class="line">"Evening, folks. Working on a project?"</span>
+      <span class="char">Jess</span>
+      <span class="line">"Just a little video. Paranormal investigation."</span>
+      <span class="char">Officer Dunn</span>
+      <span class="line">"Ah, the East wing. Watch yourselves. Lot of new patients lately. My wife says the neighborhood's changing."</span>
+      <span class="action">He unscrews a thermos. Dust and dead flies pour into a styrofoam cup. He offers it to Marcus.</span>
+      <span class="char">Officer Dunn</span>
+      <span class="line">"You kids have nice costumes. Very authentic. My dog would love that beanie."</span>
+      <span class="action">He turns, walks toward a door, and passes straight through it. The door isn't there — or rather, it closed years ago and rusted shut.</span>
+      <span class="char">Marcus</span>
+      <span class="line">"Nice guy."</span>
+      <span class="char">Jess</span>
+      <span class="line">"Yeah. Nice guy."</span>
+      <span class="action">Neither saw the door. The audience did.</span>
+    </div>
     <div class="panel-grid two">
       <div class="panel-item" onclick="openLightbox('storyboard/s06_p01.png')"><img src="storyboard/s06_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> Dunn offers coffee. Dust and dead flies pour from the thermos.</div></div>
       <div class="panel-item" onclick="openLightbox('storyboard/s06_p02.png')"><img src="storyboard/s06_p02.png" alt="Panel 2"><div class="panel-caption"><strong>2.</strong> Dunn walks through a solid door. "Nice guy." Neither saw it.</div></div>
@@ -797,6 +923,26 @@
       <span class="scene-location">INT. Chapel — Night</span>
     </div>
     <p class="scene-desc">They retreat to plan. The radio crackles. A 911 call plays — the Dover Street suicide. Jess never published the audio. She stole it. The candles spell HELP in Morse code. View count: 500,000.</p>
+    <div class="dialogue-block">
+      <span class="char">Marcus</span>
+      <span class="line">"We need to leave. Now."</span>
+      <span class="char">Jess</span>
+      <span class="line">"We can't leave. We're live. The algorithm punishes early exits —"</span>
+      <span class="action">The chapel radio crackles to life. A 911 dispatcher's voice fills the room.</span>
+      <span class="char">911 Audio</span>
+      <span class="line">"What's your emergency? ... Sir, please stay on the line..."</span>
+      <span class="char">Marcus</span>
+      <span class="line">"That's the Dover Street case. You never published that audio."</span>
+      <span class="char">Jess</span>
+      <span class="line">"I stole it."</span>
+      <span class="char">Marcus</span>
+      <span class="line">"You used REAL people? Real names? Jess, you told me they were all fake. You lied to me."</span>
+      <span class="action">The LED candles flicker. In unison. Spelling something in Morse code.</span>
+      <span class="char">Marcus</span>
+      <span class="line">"That's... H-E-L-P."</span>
+      <span class="char">Jess</span>
+      <span class="line">"Five hundred thousand viewers. Marcus. Half a million."</span>
+    </div>
     <div class="panel-grid">
       <div class="panel-item" onclick="openLightbox('storyboard/s07_p01.png')"><img src="storyboard/s07_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> The retreat. Radio crackles with blue static between them on a pew.</div></div>
       <div class="panel-item" onclick="openLightbox('storyboard/s07_p02.png')"><img src="storyboard/s07_p02.png" alt="Panel 2"><div class="panel-caption"><strong>2.</strong> Split-panel: Marcus's betrayal realization + Jess's guilt.</div></div>
@@ -812,6 +958,21 @@
       <span class="scene-location">INT. Basement — Night</span>
     </div>
     <p class="scene-desc">They find the records room. Every face they fabricated, circled. A PA voice speaks: "You made us stories. Stories last longer than people. Now we're your canon." The EMF reader melts. Jess tries to end the stream. The button doesn't work.</p>
+    <div class="dialogue-block">
+      <span class="action">Rows of moldy filing cabinets. On the wall: hundreds of printed screenshots of Ghost Bros videos. Every "victim's" face circled in red marker. The creepiest room in the building, and the one with the best cell service.</span>
+      <span class="char">PA Voice — The Collective</span>
+      <span class="line">"You made us stories. Stories last longer than people. Now we're your canon."</span>
+      <span class="char">Jess</span>
+      <span class="line">"This isn't funny. Who's doing this?"</span>
+      <span class="action">The EMF reader — the fake twelve-dollar one — screams at maximum pitch. The plastic casing bubbles and melts like wax. The battery was never installed.</span>
+      <span class="char">Marcus</span>
+      <span class="line">"Jess, the battery —"</span>
+      <span class="char">Jess</span>
+      <span class="line">"I'm ending the stream."</span>
+      <span class="action">She mashes the END LIVE button. Nothing. She mashes it again. The button turns into a thumbs-up icon. The stream continues.</span>
+      <span class="char">Jess</span>
+      <span class="line">"It won't stop. The button won't work."</span>
+    </div>
     <div class="panel-grid two">
       <div class="panel-item" onclick="openLightbox('storyboard/s08_p01.png')"><img src="storyboard/s08_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> The wall of fabricated ghost faces — all circled in red marker.</div></div>
       <div class="panel-item" onclick="openLightbox('storyboard/s08_p02.png')"><img src="storyboard/s08_p02.png" alt="Panel 2"><div class="panel-caption"><strong>2.</strong> Split-panel: "It won't stop" + the EMF reader melting like wax.</div></div>
@@ -826,6 +987,23 @@
       <span class="scene-location">INT. Basement — Night</span>
     </div>
     <p class="scene-desc">The rules are explained. They are live. The stream will not end until audience retention drops. The audience is dead. The dead have excellent retention. The only way out is content they actually want.</p>
+    <div class="dialogue-block">
+      <span class="action">Dozens of ghostly figures fill the basement, all holding glowing phones. Ordinary people. Some in hospital gowns, some in the clothes they died in. They speak in overlapping, dry, increasingly sarcastic unison.</span>
+      <span class="char">The Collective</span>
+      <span class="line">"You are live. The stream will not end until average watch-time is satisfied."</span>
+      <span class="char">Jess</span>
+      <span class="line">"And what does that mean, exactly?"</span>
+      <span class="char">The Collective</span>
+      <span class="line">"The audience is dead. The dead have excellent retention. We have nowhere else to be."</span>
+      <span class="char">Marcus</span>
+      <span class="line">"What do you want from us?"</span>
+      <span class="char">The Collective</span>
+      <span class="line">"The only way out is content we actually want."</span>
+      <span class="char">Jess</span>
+      <span class="line">"Content you want. You want me to — what — haunt harder?"</span>
+      <span class="char">The Collective</span>
+      <span class="line">"We want what you stole."</span>
+    </div>
     <div class="panel-grid two">
       <div class="panel-item" onclick="openLightbox('storyboard/s09_p01.png')"><img src="storyboard/s09_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> Dozens of ghostly figures fill the room, all holding glowing phones.</div></div>
       <div class="panel-item" onclick="openLightbox('storyboard/s09_p02.png')"><img src="storyboard/s09_p02.png" alt="Panel 2"><div class="panel-caption"><strong>2.</strong> Split-panel: retention locked at 100% + "The only way out is content."</div></div>
@@ -840,6 +1018,20 @@
       <span class="scene-location">INT. East Wing Hallway — Night</span>
     </div>
     <p class="scene-desc">Marcus tries to escape. The hallway loops. He runs past the same origami crane seven times. Jess tries to reason with the ghosts via chat. They respond with her own analytics. "Your CTR peaks at 2:34. We're not leaving at 2:34."</p>
+    <div class="dialogue-block">
+      <span class="action">Marcus bolts. The hallway stretches, then folds back on itself. An Escher loop. He passes the same origami crane seven times. Seven translucent Marcuses occupy the same frame.</span>
+      <span class="char">Marcus</span>
+      <span class="line">"I've passed that crane seven times! There's no exit!"</span>
+      <span class="action">Jess pleads into the livestream chat, ghostly comment bubbles floating around her head like translucent speech balloons.</span>
+      <span class="char">Jess</span>
+      <span class="line">"Please. We didn't mean to hurt anyone. It was just content —"</span>
+      <span class="char">Comment — The Collective</span>
+      <span class="line">"Your CTR peaks at 2:34. We're not leaving at 2:34."</span>
+      <span class="char">Comment — The Collective</span>
+      <span class="line">"Your audience retention is 98.7%. Dead people have excellent retention."</span>
+      <span class="char">Jess</span>
+      <span class="line">"These are MY analytics. How do you have my analytics?"</span>
+    </div>
     <div class="panel-grid">
       <div class="panel-item" onclick="openLightbox('storyboard/s10_p01.png')"><img src="storyboard/s10_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> Escher-like hallway loop. Seven translucent Marcuses pass the same crane.</div></div>
       <div class="panel-item" onclick="openLightbox('storyboard/s10_p02.png')"><img src="storyboard/s10_p02.png" alt="Panel 2"><div class="panel-caption"><strong>2.</strong> Jess pleads into the camera. Ghostly comment bubbles float around her.</div></div>
@@ -855,6 +1047,20 @@
       <span class="scene-location">INT. Patient Room 304 — Night</span>
     </div>
     <p class="scene-desc">A single ghost manifests: Margaret K., the Weeping Widow. Not weeping. Furious. She wants Jess to say her husband's name correctly. "You didn't even spell my name right in the thumbnail."</p>
+    <div class="dialogue-block">
+      <span class="action">Margaret K. manifests in the same room where they faked her. Not weeping. Bureaucratically furious. She wears the clothes from her obituary photo.</span>
+      <span class="char">Margaret K.</span>
+      <span class="line">"You said my husband's name was Arthur. It was Aaron. You said he died in a car accident. It was a stroke. You said I wept at his funeral. I didn't. I was angry."</span>
+      <span class="char">Jess</span>
+      <span class="line">"I'm sorry — I'll fix it — I'll make a correction —"</span>
+      <span class="char">Margaret K.</span>
+      <span class="line">"You didn't even spell my name right in the thumbnail. Margaret with a G?"</span>
+      <span class="char">Jess</span>
+      <span class="line">"I'll fix it —"</span>
+      <span class="char">Margaret K.</span>
+      <span class="line">"Too late for corrections. You don't get to edit me anymore."</span>
+      <span class="action">She doesn't want revenge. She wants to be named correctly. The horror isn't violence — it's the indignity of being misfiled.</span>
+    </div>
     <div class="panel-grid single">
       <div class="panel-item" onclick="openLightbox('storyboard/s11_p01.png')"><img src="storyboard/s11_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> Margaret K. manifests — furious, not weeping. "You didn't even spell my name right."</div></div>
     </div>
@@ -868,6 +1074,19 @@
       <span class="scene-location">INT. Chapel — Night</span>
     </div>
     <p class="scene-desc">The Collective fully manifests. Ordinary people. Some in hospital gowns, some in the clothes they died in. Sarcastic, tired, deeply unimpressed. "We've seen your acting. This is better, but you're still overplaying it."</p>
+    <div class="dialogue-block">
+      <span class="action">The pews fill with ghostly figures — an audience at the world's worst one-woman show. They are bored, sarcastic, and deeply unimpressed by Jess's terror.</span>
+      <span class="char">The Collective</span>
+      <span class="line">"We've seen your acting. This is better, but you're still overplaying it. Your fear face peaks at the left eyebrow. We have the data."</span>
+      <span class="char">Jess</span>
+      <span class="line">"Who are you people?"</span>
+      <span class="char">The Collective</span>
+      <span class="line">"We're everyone you made a villain. Everyone you reduced to a thumbnail. Everyone whose tragedy you turned into content. We're The Collective. And we have receipts."</span>
+      <span class="char">Marcus</span>
+      <span class="line">"What do you want from us? We can't undo the videos."</span>
+      <span class="char">The Collective</span>
+      <span class="line">"The truth. Not your special effects. Not your fishing line. Not your GhostTalkz app. The truth. Live. In one take. No edits."</span>
+    </div>
     <div class="panel-grid single">
       <div class="panel-item" onclick="openLightbox('storyboard/s12_p01.png')"><img src="storyboard/s12_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> The pews filled with ghostly figures — bored audience at a bad play.</div></div>
     </div>
@@ -881,6 +1100,16 @@
       <span class="scene-location">INT. Chapel — Night</span>
     </div>
     <p class="scene-desc">Jess tries to argue semantics. Marcus steps between them. He apologizes first — for every tear he faked, every prayer he performed for content, every family he let Jess exploit.</p>
+    <div class="dialogue-block">
+      <span class="char">Jess</span>
+      <span class="line">"I didn't kill you. I didn't even know you. I stole a name from an obituary. That's not a crime."</span>
+      <span class="char">The Collective</span>
+      <span class="line">"That's the apology we're waiting for."</span>
+      <span class="action">Marcus steps between them. Tears streaming. Genuine, for the first time in twenty-three episodes.</span>
+      <span class="char">Marcus</span>
+      <span class="line">"I'm sorry. For every tear I faked. Every prayer I performed for content. Every 'cold spot' I pretended to feel. Every family I let Jess exploit because I was too scared to ask where the names came from. I knew something was wrong. I didn't ask. I'm sorry."</span>
+      <span class="action">The Collective is silent. Not satisfied. Waiting.</span>
+    </div>
     <div class="panel-grid single">
       <div class="panel-item" onclick="openLightbox('storyboard/s13_p01.png')"><img src="storyboard/s13_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> Marcus steps forward, tears streaming. "I'm sorry. For every tear I faked."</div></div>
     </div>
@@ -894,6 +1123,12 @@
       <span class="scene-location">INT. Chapel — Night</span>
     </div>
     <p class="scene-desc">Jess breaks. She confesses live. Every real name. Every stolen obituary. Every family she never contacted, every correction she ignored. She doesn't ask for forgiveness. She just names them. The view count drops.</p>
+    <div class="dialogue-block">
+      <span class="action">Jess slumps into the warm plastic chair. Someone was sitting in it before she arrived. She looks into the camera. The view count: two million. All dead. All watching.</span>
+      <span class="char">Jess</span>
+      <span class="line">"I'm Jessica Park. I made up every ghost on this channel. I stole real names from real obituaries. The Weeping Widow was Margaret Kessler. The Demon of Dover Street was Daniel Reeves, sixteen years old. The Lady in White was Dr. Elaine Voss. I never asked permission. I never offered corrections. I made your tragedies into my content. I didn't kill you. But I used you. And I'm sorry. Not for the faking. For the theft."</span>
+      <span class="action">She names them all. Every single one. The view count drops. The ghosts begin to fade. Not happy. Just... disappointed enough.</span>
+    </div>
     <div class="panel-grid single">
       <div class="panel-item" onclick="openLightbox('storyboard/s14_p01.png')"><img src="storyboard/s14_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> Jess slumped in a plastic chair, naming them all. The view count drops.</div></div>
     </div>
@@ -907,6 +1142,15 @@
       <span class="scene-location">INT. Chapel — Night</span>
     </div>
     <p class="scene-desc">The ghosts fade. Not happy. Just... done. The door unlocks with a mechanical click. The livestream ends. The phones go dark. Silence.</p>
+    <div class="dialogue-block">
+      <span class="action">The Collective dissolves like breath on glass. One by one, they simply stop being interested. Not forgiveness. Just exhaustion.</span>
+      <span class="char">The Collective</span>
+      <span class="line">"Not enough. But enough for now."</span>
+      <span class="action">CLICK. The chapel door unlocks with a mechanical sound — the first real-world noise in hours.</span>
+      <span class="char">Marcus</span>
+      <span class="line">"It's over."</span>
+      <span class="action">The livestream ends. The phones go dark. Silence. Real, ordinary, beautiful silence.</span>
+    </div>
     <div class="panel-grid single">
       <div class="panel-item" onclick="openLightbox('storyboard/s15_p01.png')"><img src="storyboard/s15_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> Empty chapel. Fading wisps. CLICK. Offline. Just paper now.</div></div>
     </div>
@@ -920,6 +1164,15 @@
       <span class="scene-location">EXT. Parking Lot — Dawn</span>
     </div>
     <p class="scene-desc">They stumble out into gray morning. Jess deletes the video, the channel, the app. She crushes the phone under her heel. They laugh. Ugly, relieved, broken laughter.</p>
+    <div class="dialogue-block">
+      <span class="action">Gray dawn. The streetlight is off. The car starts. They don't speak. Jess pulls out her phone.</span>
+      <span class="char">Jess</span>
+      <span class="line">"Deleting the video. Deleting the channel. Deleting the app."</span>
+      <span class="action">She throws the phone onto the asphalt and crushes it under her heel. Glass shatters. The screen goes black. For a moment, they just breathe.</span>
+      <span class="char">Marcus</span>
+      <span class="line">"We're free."</span>
+      <span class="action">They laugh. Ugly, relieved, broken laughter. The laughter of people who have been to the edge of something and been allowed to walk back.</span>
+    </div>
     <div class="panel-grid two">
       <div class="panel-item" onclick="openLightbox('storyboard/s16_p01.png')"><img src="storyboard/s16_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> Gray dawn. The streetlight is off. They stumble toward the running car.</div></div>
       <div class="panel-item" onclick="openLightbox('storyboard/s16_p02.png')"><img src="storyboard/s16_p02.png" alt="Panel 2"><div class="panel-caption"><strong>2.</strong> Boot mid-stomp. Phone shatters. Ugly broken laughter. Healing.</div></div>
@@ -934,6 +1187,17 @@
       <span class="scene-location">INT. Marcus's Car — Dawn</span>
     </div>
     <p class="scene-desc">Driving away. Hospital shrinks in the rearview. Marcus checks backup phone. Push notification: "Ghost Bros is TRENDING." He laughs. "Good one, algorithm."</p>
+    <div class="dialogue-block">
+      <span class="action">The hospital shrinks in the rearview. Marcus checks his old Android — the backup phone he kept in the glove compartment for emergencies.</span>
+      <span class="char">Marcus</span>
+      <span class="line">"I'm just gonna text my sister, let her know I'm —"</span>
+      <span class="action">A cheerful DING. Push notification floats on the screen.</span>
+      <span class="char">Phone</span>
+      <span class="line">"Ghost Bros is TRENDING!"</span>
+      <span class="char">Marcus</span>
+      <span class="line">"Good one, algorithm."</span>
+      <span class="action">He laughs. Jess doesn't.</span>
+    </div>
     <div class="panel-grid single">
       <div class="panel-item" onclick="openLightbox('storyboard/s17_p02.png')"><img src="storyboard/s17_p02.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> Behind-the-driver shot. Notification floating: "Ghost Bros is TRENDING!"</div></div>
     </div>
@@ -947,6 +1211,16 @@
       <span class="scene-location">INT. Marcus's Car — Dawn</span>
     </div>
     <p class="scene-desc">It's not a joke. The channel exists. New logo. Better editing. The confession is gone. The "real haunting" is live, cut for maximum suspense. Subscribers: 10 million and climbing.</p>
+    <div class="dialogue-block">
+      <span class="action">Jess grabs the phone. The channel exists. Not restored — NEW. A sleek logo. Professional editing. A horror soundtrack neither of them added.</span>
+      <span class="char">Jess</span>
+      <span class="line">"The confession is gone. Someone edited this."</span>
+      <span class="char">Marcus</span>
+      <span class="line">"We didn't make this. Jess, we didn't make any of this."</span>
+      <span class="action">The video playing: their fear, their real haunting, cut for maximum suspense. Complete with jump scares they didn't stage. Subscriber count climbs: 10 million. 20 million. 50 million.</span>
+      <span class="char">Jess</span>
+      <span class="line">"It's not a joke."</span>
+    </div>
     <div class="panel-grid single">
       <div class="panel-item" onclick="openLightbox('storyboard/s18_p01.png')"><img src="storyboard/s18_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> Phone screen dominates: new logo, horror edit, 10,000,000+ subscribers.</div></div>
     </div>
@@ -960,6 +1234,21 @@
       <span class="scene-location">INT. Marcus's Car — Dawn</span>
     </div>
     <p class="scene-desc">Jess grabs the phone. Tries to delete. The account regenerates. Tries to report. The report button thanks her for the engagement. Tries to log out. The password is her mother's maiden name. She never used that password. A new comment: "We know you."</p>
+    <div class="dialogue-block">
+      <span class="char">Jess</span>
+      <span class="line">"I'm deleting it."</span>
+      <span class="action">She hits DELETE CHANNEL. The page refreshes. The channel is back.</span>
+      <span class="char">Jess</span>
+      <span class="line">"What —"</span>
+      <span class="action">She hits REPORT. The button transforms into a thumbs-up. "Thanks for your engagement!"</span>
+      <span class="char">Marcus</span>
+      <span class="line">"Jess, stop. You're feeding it."</span>
+      <span class="action">She tries to log out. The password field auto-fills: her mother's maiden name. She never used that password for anything.</span>
+      <span class="char">Comment — St. Mary's Admin</span>
+      <span class="line">"We know you."</span>
+      <span class="char">Jess</span>
+      <span class="line">"It knows my mother's name. It knows everything."</span>
+    </div>
     <div class="panel-grid two">
       <div class="panel-item" onclick="openLightbox('storyboard/s19_p01.png')"><img src="storyboard/s19_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> Delete button regenerates. Report becomes "Thanks for your engagement!"</div></div>
       <div class="panel-item" onclick="openLightbox('storyboard/s19_p02.png')"><img src="storyboard/s19_p02.png" alt="Panel 2"><div class="panel-caption"><strong>2.</strong> Password: her mother's maiden name. Comment: "We know you."</div></div>
@@ -974,6 +1263,19 @@
       <span class="scene-location">EXT. Roadside — Dawn</span>
     </div>
     <p class="scene-desc">They pull over. Jess screams into the empty field. Marcus cries. The phone, sitting on the dashboard, dings. Another million. Then another.</p>
+    <div class="dialogue-block">
+      <span class="action">They pull over on the shoulder. Jess gets out of the car. The empty field stretches to the horizon.</span>
+      <span class="char">Jess</span>
+      <span class="line">"LEAVE US ALONE!"</span>
+      <span class="action">She screams until her voice breaks. It changes nothing. Marcus sobs in the driver's seat, forehead against the steering wheel.</span>
+      <span class="action">The phone, sitting on the dashboard, dings.</span>
+      <span class="char">Phone</span>
+      <span class="line">"+1,000,000 subscribers"</span>
+      <span class="action">Ding.</span>
+      <span class="char">Phone</span>
+      <span class="line">"+1,000,000 subscribers"</span>
+      <span class="action">Ding. Ding. Ding. Like a heartbeat. Like a timer. Like engagement.</span>
+    </div>
     <div class="panel-grid single">
       <div class="panel-item" onclick="openLightbox('storyboard/s20_p01.png')"><img src="storyboard/s20_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> Jess screams over the hood. Marcus sobs in the car. Phone dings: 1M, then 2M.</div></div>
     </div>
@@ -987,6 +1289,15 @@
       <span class="scene-location">EXT. Hospital Parking Lot — Dawn</span>
     </div>
     <p class="scene-desc">They drive back. The hospital is gone. Just an empty lot and one buzzing streetlight. But the livestream is still active. Background: the parking lot. They are still in the frame. They were never out.</p>
+    <div class="dialogue-block">
+      <span class="action">They drive back. The hospital is gone. Not demolished — absent. Just an empty lot and the one buzzing streetlight.</span>
+      <span class="char">Marcus</span>
+      <span class="line">"Where is it?"</span>
+      <span class="action">But the livestream is still active. Background: the parking lot. They are in the frame. Walking around the empty lot. Looking for a building that doesn't exist.</span>
+      <span class="char">Jess</span>
+      <span class="line">"We never left."</span>
+      <span class="action">The video shows them from a high angle. A drone shot. There is no drone.</span>
+    </div>
     <div class="panel-grid single">
       <div class="panel-item" onclick="openLightbox('storyboard/s21_p01.png')"><img src="storyboard/s21_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> Hospital gone. Phone livestream shows the parking lot — with them in it.</div></div>
     </div>
@@ -1000,6 +1311,17 @@
       <span class="scene-location">EXT. Hospital Parking Lot — Dawn</span>
     </div>
     <p class="scene-desc">A thousand phones materialize in the gray air. Held by invisible hands. Every screen shows Ghost Bros. Every screen shows their faces. The view count is now just a symbol: the infinity loop.</p>
+    <div class="dialogue-block">
+      <span class="action">A thousand phones materialize in the gray dawn air. Held by invisible hands. Every screen shows Ghost Bros. Every screen shows their faces. The view count is no longer a number — it is a symbol. The infinity loop. &infin;</span>
+      <span class="char">Comment — St. Mary's Admin</span>
+      <span class="line">"Engagement is forever. Thank you for the content."</span>
+      <span class="action">Jess and Marcus stand frozen in the parking lot. Their own faces appear on a thousand screens around them. The phones are held by the invisible dead — watching, waiting, subscribing.</span>
+      <span class="char">Jess</span>
+      <span class="line">"We need to go live."</span>
+      <span class="char">Marcus</span>
+      <span class="line">"We are live."</span>
+      <span class="action">They were never the hosts. They were the content. And the show never ends.</span>
+    </div>
     <div class="panel-grid single">
       <div class="panel-item" onclick="openLightbox('storyboard/s22_p01.png')"><img src="storyboard/s22_p01.png" alt="Panel 1"><div class="panel-caption"><strong>1.</strong> Thousands of phones in the sky. Infinity symbol for a view count. The end.</div></div>
     </div>
