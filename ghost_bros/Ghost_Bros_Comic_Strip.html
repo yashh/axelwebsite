@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GHOST BROS. — The Comic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=EB+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f5f0e8;
+    --ink: #1a1a1a;
+    --accent: #c45c3a;
+    --accent-mustard: #c4a03a;
+    --accent-ghost: #7a9aaa;
+    --panel-bg: #0c0c0c;
+    --bubble-bg: #f5f0e8;
+    --gutter: 16px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Comic Neue', sans-serif;
+    color: var(--paper);
+    background: var(--ink);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* Halftone texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.04;
+    background-image: radial-gradient(circle, #f5f0e8 1px, transparent 1px);
+    background-size: 8px 8px;
+  }
+
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--ink); }
+  ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
+
+  /* ── Navigation ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 16px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(to bottom, var(--ink) 70%, transparent);
+    transition: background 0.3s;
+  }
+  nav.scrolled { background: rgba(26,26,26,0.95); backdrop-filter: blur(8px); }
+  nav .logo {
+    font-family: 'Bangers', cursive;
+    font-size: 22px;
+    letter-spacing: 3px;
+    color: var(--paper);
+  }
+  nav .logo span { color: var(--accent); }
+  nav .nav-links {
+    display: flex;
+    gap: 24px;
+    list-style: none;
+  }
+  nav .nav-links a {
+    font-family: 'Comic Neue', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--paper);
+    text-decoration: none;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+  }
+  nav .nav-links a:hover { opacity: 1; color: var(--accent); }
+
+  /* ── Cover Page ── */
+  .comic-cover {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    padding: 40px 20px;
+    background: linear-gradient(180deg, #0c0c0c 0%, #1a1520 50%, #0c0c0c 100%);
+    overflow: hidden;
+  }
+  .comic-cover .cover-bg {
+    position: absolute;
+    inset: 0;
+    opacity: 0.15;
+    background: url('storyboard/s22_p01.png') center/cover no-repeat;
+    filter: grayscale(60%) contrast(1.2);
+  }
+  .comic-cover .cover-content {
+    position: relative;
+    z-index: 2;
+  }
+  .comic-cover .issue-label {
+    font-family: 'Bangers', cursive;
+    font-size: 14px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent-mustard);
+    margin-bottom: 16px;
+  }
+  .comic-cover h1 {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(56px, 14vw, 140px);
+    letter-spacing: 6px;
+    line-height: 0.9;
+    color: var(--paper);
+    text-shadow: 5px 5px 0 var(--accent), 10px 10px 0 rgba(196,92,58,0.3);
+    margin-bottom: 12px;
+  }
+  .comic-cover .tagline {
+    font-family: 'EB Garamond', serif;
+    font-size: clamp(18px, 3vw, 26px);
+    font-style: italic;
+    color: var(--accent-ghost);
+    max-width: 500px;
+    margin: 0 auto 32px;
+  }
+  .comic-cover .meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent-mustard);
+    opacity: 0.8;
+  }
+  .comic-cover .scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Bangers', cursive;
+    font-size: 14px;
+    letter-spacing: 2px;
+    color: var(--paper);
+    opacity: 0.5;
+    animation: bounce 2s infinite;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-8px); }
+  }
+
+  /* ── Cast Page ── */
+  .cast-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 80px 20px;
+  }
+  .cast-header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .cast-header h2 {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(32px, 5vw, 56px);
+    letter-spacing: 3px;
+    color: var(--paper);
+    text-shadow: 3px 3px 0 var(--accent);
+  }
+  .cast-header p {
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--accent-ghost);
+    margin-top: 8px;
+  }
+  .cast-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 32px;
+  }
+  .cast-card {
+    background: var(--panel-bg);
+    border: 3px solid var(--paper);
+    overflow: hidden;
+  }
+  .cast-card img {
+    width: 100%;
+    display: block;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-bottom: 3px solid var(--paper);
+  }
+  .cast-card .cast-info {
+    padding: 20px;
+  }
+  .cast-card .cast-name {
+    font-family: 'Bangers', cursive;
+    font-size: 24px;
+    letter-spacing: 2px;
+    color: var(--paper);
+    margin-bottom: 4px;
+  }
+  .cast-card .cast-role {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .cast-card .cast-desc {
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(245,240,232,0.7);
+  }
+
+  /* ── Comic Page ── */
+  .comic-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 20px;
+    border-bottom: 2px dashed rgba(245,240,232,0.1);
+  }
+  .comic-page:last-of-type { border-bottom: none; }
+
+  .scene-banner {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding: 16px 20px;
+    background: var(--panel-bg);
+    border: 3px solid var(--paper);
+    border-left: 6px solid var(--accent);
+  }
+  .scene-number {
+    font-family: 'Bangers', cursive;
+    font-size: 28px;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .scene-title-text {
+    font-family: 'Bangers', cursive;
+    font-size: 24px;
+    letter-spacing: 2px;
+    color: var(--paper);
+  }
+  .scene-location {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--accent-mustard);
+  }
+
+  /* ── Panel Grid ── */
+  .panel-grid {
+    display: grid;
+    gap: var(--gutter);
+    margin-bottom: var(--gutter);
+  }
+  .panel-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .panel-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .panel-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+  /* ── Panel ── */
+  .panel {
+    background: var(--panel-bg);
+    border: 3px solid var(--paper);
+    position: relative;
+    overflow: hidden;
+  }
+  .panel.wide { grid-column: 1 / -1; }
+  .panel img {
+    width: 100%;
+    display: block;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+  }
+
+  /* ── Speech Bubble ── */
+  .bubble {
+    background: var(--bubble-bg);
+    color: var(--ink);
+    padding: 10px 14px;
+    border-radius: 16px;
+    position: relative;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 8px;
+    box-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+  }
+  .bubble:last-child { margin-bottom: 0; }
+  .bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 24px;
+    width: 0; height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 12px solid var(--bubble-bg);
+  }
+  .bubble.tail-right::after { left: auto; right: 24px; }
+  .bubble.tail-center::after { left: 50%; transform: translateX(-50%); }
+  .bubble .speaker {
+    display: block;
+    font-family: 'Bangers', cursive;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--accent);
+    margin-bottom: 2px;
+  }
+  .bubble.jagged {
+    border-radius: 2px;
+    clip-path: polygon(
+      0% 4%, 3% 0%, 7% 3%, 12% 0%, 18% 2%, 25% 0%, 32% 3%, 40% 0%,
+      48% 2%, 55% 0%, 62% 3%, 70% 0%, 78% 2%, 85% 0%, 92% 3%, 100% 0%,
+      98% 8%, 100% 15%, 97% 22%, 100% 30%, 98% 38%, 100% 45%, 97% 52%,
+      100% 60%, 98% 68%, 100% 75%, 97% 82%, 100% 90%, 98% 96%, 100% 100%,
+      92% 97%, 85% 100%, 78% 97%, 70% 100%, 62% 97%, 55% 100%, 48% 97%,
+      40% 100%, 32% 97%, 25% 100%, 18% 97%, 12% 100%, 7% 97%, 3% 100%,
+      0% 96%, 2% 90%, 0% 82%, 3% 75%, 0% 68%, 2% 60%, 0% 52%, 3% 45%,
+      0% 38%, 2% 30%, 0% 22%, 3% 15%, 0% 8%
+    );
+    padding: 14px 18px;
+  }
+  .bubble.jagged::after { display: none; }
+  .bubble.thought {
+    border-radius: 50%;
+    padding: 14px 18px;
+  }
+  .bubble.thought::after {
+    border-top: 10px solid var(--bubble-bg);
+    bottom: -8px;
+    left: 20px;
+  }
+  .bubble.phone {
+    background: #1a1a1a;
+    color: var(--paper);
+    border: 2px solid var(--accent-ghost);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+  }
+  .bubble.phone::after { border-top-color: #1a1a1a; }
+  .bubble.phone .speaker { color: var(--accent-ghost); }
+
+  /* ── Dialogue Area ── */
+  .dialogue-area {
+    padding: 14px 16px;
+    background: var(--panel-bg);
+    border-top: 2px solid var(--paper);
+  }
+
+  /* ── Narration Box ── */
+  .narration-box {
+    background: rgba(196, 160, 58, 0.08);
+    border: 2px solid var(--accent-mustard);
+    padding: 14px 18px;
+    margin: 12px 0;
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--paper);
+  }
+  .narration-box strong { color: var(--accent-mustard); font-weight: 600; }
+
+  /* ── Sound Effect ── */
+  .sfx {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(24px, 4vw, 48px);
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-shadow: 2px 2px 0 var(--paper);
+    text-align: center;
+    margin: 8px 0;
+  }
+
+  /* ── Dialogue Stack (for single-panel scenes) ── */
+  .dialogue-stack {
+    background: var(--panel-bg);
+    border: 3px solid var(--paper);
+    border-top: none;
+    padding: 16px;
+  }
+  .dialogue-stack .bubble { margin-bottom: 10px; }
+
+  /* ── Page Break ── */
+  .page-break {
+    text-align: center;
+    padding: 40px 0;
+    font-family: 'Bangers', cursive;
+    font-size: 18px;
+    color: var(--accent);
+    letter-spacing: 4px;
+  }
+  .page-break::before, .page-break::after {
+    content: '• • •';
+    display: block;
+    margin: 8px 0;
+    color: var(--paper);
+    opacity: 0.3;
+  }
+
+  /* ── End Page ── */
+  .end-page {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 60px 20px;
+  }
+  .end-page h2 {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(36px, 8vw, 80px);
+    letter-spacing: 4px;
+    color: var(--paper);
+    text-shadow: 3px 3px 0 var(--accent);
+    margin-bottom: 16px;
+  }
+  .end-page p {
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--accent-ghost);
+    max-width: 500px;
+  }
+  .end-page .infinity {
+    font-size: 64px;
+    color: var(--accent-ghost);
+    margin-top: 24px;
+    opacity: 0.5;
+    animation: pulse 3s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.1); }
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    nav { padding: 12px 16px; }
+    nav .nav-links { display: none; }
+    .panel-grid.cols-2,
+    .panel-grid.cols-3,
+    .panel-grid.cols-4 { grid-template-columns: 1fr; }
+    .scene-banner { flex-wrap: wrap; }
+    .scene-location { margin-left: 0; width: 100%; margin-top: 8px; }
+    .cast-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ── Reveal ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav id="navbar">
+  <div class="logo">Ghost <span>Bros.</span></div>
+  <ul class="nav-links">
+    <li><a href="#cast">Cast</a></li>
+    <li><a href="#scene01">Scene 1</a></li>
+    <li><a href="#scene10">Scene 10</a></li>
+    <li><a href="#scene20">Scene 20</a></li>
+  </ul>
+</nav>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- COVER PAGE                                      -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-cover" id="top">
+  <div class="cover-bg"></div>
+  <div class="cover-content">
+    <div class="issue-label">Issue #1 — Going Viral</div>
+    <h1>GHOST<br>BROS.</h1>
+    <p class="tagline">Two paranormal vloggers fake ghost hunts for clicks until the dead decide to rate their content.</p>
+    <p class="meta">22 Scenes &middot; 45 Panels &middot; A Horror-Comedy</p>
+  </div>
+  <div class="scroll-hint">Scroll to Read &darr;</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- CAST OF CHARACTERS                              -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="cast-page" id="cast">
+  <div class="cast-header reveal">
+    <h2>Meet the Cast</h2>
+    <p>The stars of the worst paranormal channel on YouTube.</p>
+  </div>
+  <div class="cast-grid">
+    <div class="cast-card reveal">
+      <img src="characters/jessica.png" alt="Jessica Park">
+      <div class="cast-info">
+        <div class="cast-name">Jessica "Jess" Park</div>
+        <div class="cast-role">Age 28 &middot; The Brain</div>
+        <div class="cast-desc">Cynical producer of Ghost Bros. Treats haunting like content strategy. Beneath the armor of irony is a guilty conscience buried so deep she needs a ghost to dig it up.</div>
+      </div>
+    </div>
+    <div class="cast-card reveal">
+      <img src="characters/marcus.png" alt="Marcus Reyes">
+      <div class="cast-info">
+        <div class="cast-name">Marcus Reyes</div>
+        <div class="cast-role">Age 26 &middot; The Heart</div>
+        <div class="cast-desc">Earnest believer who cries on camera and "feels cold spots." Leaving to become a dental hygienist because "at least mouths are honest."</div>
+      </div>
+    </div>
+    <div class="cast-card reveal">
+      <img src="characters/officer_dunn.png" alt="Officer Dunn">
+      <div class="cast-info">
+        <div class="cast-name">Officer Dunn</div>
+        <div class="cast-role">Age 50s &middot; The Ghost</div>
+        <div class="cast-desc">Friendly security guard who offers coffee from a thermos that pours dust. Walks through solid doors. The audience notices before the characters do.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 01: THE ARRIVAL                           -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene01">
+  <div class="scene-banner reveal">
+    <span class="scene-number">01</span>
+    <span class="scene-title-text">THE ARRIVAL</span>
+    <span class="scene-location">Ext. St. Mary's Hospital — Night</span>
+  </div>
+
+  <div class="panel-grid cols-2 reveal">
+    <div class="panel wide">
+      <img src="storyboard/s01_p01.png" alt="Establishing shot">
+      <div class="dialogue-area">
+        <div class="narration-box">St. Mary's Hospital looms against a moonless sky. The parking lot is cracked asphalt and one flickering streetlight.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel-grid cols-2 reveal">
+    <div class="panel">
+      <img src="storyboard/s01_p02.png" alt="Jess and Marcus argue">
+    </div>
+    <div class="panel">
+      <img src="storyboard/s01_p03.png" alt="The argument">
+    </div>
+  </div>
+  <div class="dialogue-stack reveal">
+    <div class="bubble"><span class="speaker">Jess</span>"Vertical. We're doing vertical."</div>
+    <div class="bubble tail-right"><span class="speaker">Marcus</span>"But the landscape — people watch on laptops, Jess —"</div>
+    <div class="bubble"><span class="speaker">Jess</span>"Marcus. No one watches landscape on a toilet. Vertical gets forty percent more completion. It's science."</div>
+  </div>
+
+  <div class="panel-grid cols-2 reveal">
+    <div class="panel">
+      <img src="storyboard/s01_p04.png" alt="She swats his hand">
+    </div>
+    <div class="panel">
+      <img src="storyboard/s01_p05.png" alt="Marcus reveals">
+    </div>
+  </div>
+  <div class="dialogue-stack reveal">
+    <div class="bubble"><span class="speaker">Marcus</span>"This is my last video, Jess. I'm going to dental hygienist school."</div>
+    <div class="narration-box">She freezes for one frame. Then the armor slams back down.</div>
+  </div>
+
+  <div class="panel-grid cols-2 reveal">
+    <div class="panel">
+      <img src="storyboard/s01_p06.png" alt="Jess's smirk freezes">
+    </div>
+    <div class="panel">
+      <img src="storyboard/s01_p07.png" alt="The beanie flick">
+    </div>
+  </div>
+  <div class="dialogue-stack reveal">
+    <div class="bubble"><span class="speaker">Jess</span>"At least mouths are honest. And at least take that off. You look like a blueberry had a miscarriage."</div>
+    <div class="narration-box">She flicks his beanie pom-pom. He recoils.</div>
+  </div>
+
+  <div class="panel-grid cols-2 reveal">
+    <div class="panel wide">
+      <img src="storyboard/s01_p08.png" alt="Walking toward the ER">
+      <div class="dialogue-area">
+        <div class="narration-box">They walk toward the ER. She's ahead. He trails, slumped. Neither knows what waits inside.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="page-break">TO BE CONTINUED</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 02: BEHIND YOU                            -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene02">
+  <div class="scene-banner reveal">
+    <span class="scene-number">02</span>
+    <span class="scene-title-text">BEHIND YOU</span>
+    <span class="scene-location">Int. Lobby — Night</span>
+  </div>
+
+  <div class="panel-grid cols-2 reveal">
+    <div class="panel">
+      <img src="storyboard/s02_p01.png" alt="Setting up">
+      <div class="dialogue-area">
+        <div class="bubble"><span class="speaker">Jess</span>"Behold. The Ghost Bros EMF Reader. Twelve dollars on Amazon. One LED. A sticker that says 'PROFESSIONAL.'"</div>
+        <div class="bubble tail-right"><span class="speaker">Marcus</span>"It has good reviews."</div>
+        <div class="bubble"><span class="speaker">Jess</span>"The reviews are from people who bought it for their six-year-olds."</div>
+      </div>
+    </div>
+    <div class="panel">
+      <img src="storyboard/s02_p02.png" alt="EVP app says BEHIND YOU">
+      <div class="dialogue-area">
+        <div class="bubble"><span class="speaker">Marcus</span>"Okay, testing the EVP app..."</div>
+        <div class="bubble jagged"><span class="speaker">EVP App</span>"BEHIND YOU."</div>
+        <div class="bubble"><span class="speaker">Jess</span>"Did you program that?"</div>
+        <div class="bubble tail-right"><span class="speaker">Marcus</span>"No. It's random. It's a four-ninety-nine app called GhostTalkz."</div>
+        <div class="bubble"><span class="speaker">Jess</span>"I wish I was that clever."</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel-grid reveal">
+    <div class="panel wide">
+      <img src="storyboard/s02_p03.png" alt="Nothing behind them">
+      <div class="dialogue-area">
+        <div class="narration-box">They laugh. Same space, pulled back. <strong>Nothing behind them.</strong> One candle dies. Neither notices.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 03: NOT ON CUE                            -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene03">
+  <div class="scene-banner reveal">
+    <span class="scene-number">03</span>
+    <span class="scene-title-text">NOT ON CUE</span>
+    <span class="scene-location">Int. East Wing Hallway — Night</span>
+  </div>
+
+  <div class="panel-grid cols-2 reveal">
+    <div class="panel">
+      <img src="storyboard/s03_p01.png" alt="The performance">
+      <div class="dialogue-area">
+        <div class="bubble"><span class="speaker">Jess</span>"Welcome back to Ghost Bros. Tonight we're at St. Mary's, the most haunted hospital in the state. I'm Jess."</div>
+        <div class="bubble tail-right"><span class="speaker">Marcus</span>"And I'm Marcus. And I can already feel the energy."</div>
+        <div class="narration-box">He fake-shivers. Twelve viewers. Mostly bots.</div>
+      </div>
+    </div>
+    <div class="panel">
+      <img src="storyboard/s03_p02.png" alt="Two doors slam">
+      <div class="dialogue-area">
+        <div class="sfx">SLAM! SLAM!</div>
+        <div class="bubble"><span class="speaker">Jess</span>"Did you hear that?"</div>
+        <div class="narration-box">She cues the app with a hidden foot-tap. Another door slams — simultaneously, from the opposite direction. <strong>Not on cue.</strong></div>
+        <div class="bubble tail-right"><span class="speaker">Marcus</span>"That wasn't me."</div>
+        <div class="bubble"><span class="speaker">Jess</span>"It's the wind. Old building. Keep rolling."</div>
+        <div class="narration-box">But she checks the app. It wasn't the app.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 04: THE ORIGAMI CRANE                     -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene04">
+  <div class="scene-banner reveal">
+    <span class="scene-number">04</span>
+    <span class="scene-title-text">THE ORIGAMI CRANE</span>
+    <span class="scene-location">Int. Patient Room 304 — Night</span>
+  </div>
+
+  <div class="panel-grid cols-3 reveal">
+    <div class="panel">
+      <img src="storyboard/s04_p01.png" alt="The con">
+      <div class="dialogue-area">
+        <div class="bubble"><span class="speaker">Jess</span>"Patient Room 304. This is where the orderly saw the woman in white. On three. One... two..."</div>
+        <div class="narration-box">Fishing line yanks the sheet clean off the bed. Perfect execution.</div>
+        <div class="bubble"><span class="speaker">Jess</span>"And CUT. That is how you make content, Marcus."</div>
+      </div>
+    </div>
+    <div class="panel">
+      <img src="storyboard/s04_p02.png" alt="The sheet hovers">
+      <div class="dialogue-area">
+        <div class="narration-box">The sheet hovers three feet off the ground. The fishing line hangs limp. Then it begins folding itself — precise, deliberate, origami.</div>
+      </div>
+    </div>
+    <div class="panel">
+      <img src="storyboard/s04_p03.png" alt="Origami crane in lap">
+      <div class="dialogue-area">
+        <div class="narration-box">A perfect crane floats across the room and lands in Marcus's lap.</div>
+        <div class="bubble tail-right"><span class="speaker">Marcus</span>"Jess. How many viewers?"</div>
+        <div class="bubble"><span class="speaker">Jess</span>"Four thousand. Marcus, we only have twelve subscribers."</div>
+        <div class="narration-box">The crane's paper wings flutter. No wind.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 05: MARGARET K.                           -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene05">
+  <div class="scene-banner reveal">
+    <span class="scene-number">05</span>
+    <span class="scene-title-text">MARGARET K.</span>
+    <span class="scene-location">Int. East Wing Hallway — Night</span>
+  </div>
+
+  <div class="panel-grid cols-2 reveal">
+    <div class="panel">
+      <img src="storyboard/s05_p01.png" alt="Jess scrolling">
+      <div class="dialogue-area">
+        <div class="narration-box">Jess scrolls comments with a lazy smirk. Still in producer mode.</div>
+      </div>
+    </div>
+    <div class="panel">
+      <img src="storyboard/s05_p02.png" alt="The comment">
+      <div class="dialogue-area">
+        <div class="bubble phone"><span class="speaker">Comment — Margaret K.</span>"Nice trick. Used the same line on my house. Episode 7. — Margaret K."</div>
+        <div class="narration-box">The blood drains from Jess's face. She stops walking.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel-grid reveal">
+    <div class="panel wide">
+      <img src="storyboard/s05_p03.png" alt="Jess goes pale">
+      <div class="dialogue-area">
+        <div class="bubble tail-right"><span class="speaker">Marcus</span>"What is it?"</div>
+        <div class="bubble"><span class="speaker">Jess</span>"Margaret K. She was real. She died."</div>
+        <div class="bubble tail-right"><span class="speaker">Marcus</span>"What are you talking about?"</div>
+        <div class="bubble"><span class="speaker">Jess</span>"The Weeping Widow. I made her up. But she was real. I used her real obituary. I used her real name."</div>
+        <div class="bubble tail-right"><span class="speaker">Marcus</span>"You used real people? Real names? Jess, you told me they were all fake."</div>
+        <div class="narration-box">Another comment pops up. Then another. All from names she recognizes.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 06: OFFICER DUNN                          -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene06">
+  <div class="scene-banner reveal">
+    <span class="scene-number">06</span>
+    <span class="scene-title-text">OFFICER DUNN</span>
+    <span class="scene-location">Int. Hallway — Night</span>
+  </div>
+
+  <div class="panel-grid cols-2 reveal">
+    <div class="panel">
+      <img src="storyboard/s06_p01.png" alt="Dunn offers coffee">
+      <div class="dialogue-area">
+        <div class="bubble"><span class="speaker">Officer Dunn</span>"Evening, folks. Working on a project?"</div>
+        <div class="bubble tail-right"><span class="speaker">Jess</span>"Just a little video. Paranormal investigation."</div>
+        <div class="bubble"><span class="speaker">Officer Dunn</span>"Ah, the East wing. Watch yourselves. Lot of new patients lately. My wife says the neighborhood's changing."</div>
+        <div class="narration-box">He unscrews a thermos. Dust and dead flies pour into a styrofoam cup. He offers it to Marcus.</div>
+        <div class="bubble"><span class="speaker">Officer Dunn</span>"You kids have nice costumes. Very authentic. My dog would love that beanie."</div>
+      </div>
+    </div>
+    <div class="panel">
+      <img src="storyboard/s06_p02.png" alt="Dunn walks through door">
+      <div class="dialogue-area">
+        <div class="narration-box">He turns, walks toward a door, and passes straight through it. The door isn't there — or rather, it closed years ago and rusted shut.</div>
+        <div class="bubble tail-right"><span class="speaker">Marcus</span>"Nice guy."</div>
+        <div class="bubble"><span class="speaker">Jess</span>"Yeah. Nice guy."</div>
+        <div class="narration-box">Neither saw the door. <strong>The audience did.</strong></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 07: HELP                                  -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene07">
+  <div class="scene-banner reveal">
+    <span class="scene-number">07</span>
+    <span class="scene-title-text">HELP</span>
+    <span class="scene-location">Int. Chapel — Night</span>
+  </div>
+
+  <div class="panel-grid cols-3 reveal">
+    <div class="panel">
+      <img src="storyboard/s07_p01.png" alt="The retreat">
+      <div class="dialogue-area">
+        <div class="bubble tail-right"><span class="speaker">Marcus</span>"We need to leave. Now."</div>
+        <div class="bubble"><span class="speaker">Jess</span>"We can't leave. We're live. The algorithm punishes early exits —"</div>
+        <div class="narration-box">The chapel radio crackles to life.</div>
+      </div>
+    </div>
+    <div class="panel">
+      <img src="storyboard/s07_p02.png" alt="Marcus's betrayal">
+      <div class="dialogue-area">
+        <div class="bubble jagged"><span class="speaker">911 Audio</span>"What's your emergency? ... Sir, please stay on the line..."</div>
+        <div class="bubble tail-right"><span class="speaker">Marcus</span>"That's the Dover Street case. You never published that audio."</div>
+        <div class="bubble"><span class="speaker">Jess</span>"I stole it."</div>
+        <div class="bubble tail-right"><span class="speaker">Marcus</span>"You used REAL people? Real names? Jess, you told me they were all fake. You lied to me."</div>
+      </div>
+    </div>
+    <div class="panel">
+      <img src="storyboard/s07_p03.png" alt="Candles spell HELP">
+      <div class="dialogue-area">
+        <div class="narration-box">The LED candles flicker. In unison. Spelling something in Morse code.</div>
+        <div class="bubble tail-right"><span class="speaker">Marcus</span>"That's... H-E-L-P."</div>
+        <div class="bubble"><span class="speaker">Jess</span>"Five hundred thousand viewers. Marcus. Half a million."</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 08: THE WALL                              -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene08">
+  <div class="scene-banner reveal">
+    <span class="scene-number">08</span>
+    <span class="scene-title-text">THE WALL</span>
+    <span class="scene-location">Int. Basement — Night</span>
+  </div>
+
+  <div class="panel-grid cols-2 reveal">
+    <div class="panel">
+      <img src="storyboard/s08_p01.png" alt="The wall of faces">
+      <div class="dialogue-area">
+        <div class="narration-box">Rows of moldy filing cabinets. On the wall: hundreds of printed screenshots of Ghost Bros videos. Every "victim's" face circled in red marker. The creepiest room in the building, and the one with the best cell service.</div>
+        <div class="bubble jagged"><span class="speaker">PA Voice — The Collective</span>"You made us stories. Stories last longer than people. Now we're your canon."</div>
+        <div class="bubble"><span class="speaker">Jess</span>"This isn't funny. Who's doing this?"</div>
+      </div>
+    </div>
+    <div class="panel">
+      <img src="storyboard/s08_p02.png" alt="EMF reader melts">
+      <div class="dialogue-area">
+        <div class="narration-box">The EMF reader screams at maximum pitch. The plastic casing bubbles and melts like wax. The battery was never installed.</div>
+        <div class="bubble tail-right"><span class="speaker">Marcus</span>"Jess, the battery —"</div>
+        <div class="bubble"><span class="speaker">Jess</span>"I'm ending the stream."</div>
+        <div class="narration-box">She mashes the END LIVE button. Nothing. She mashes it again. The button turns into a thumbs-up icon. The stream continues.</div>
+        <div class="bubble"><span class="speaker">Jess</span>"It won't stop. The button won't work."</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 09: THE RULES                             -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene09">
+  <div class="scene-banner reveal">
+    <span class="scene-number">09</span>
+    <span class="scene-title-text">THE RULES</span>
+    <span class="scene-location">Int. Basement — Night</span>
+  </div>
+
+  <div class="panel-grid cols-2 reveal">
+    <div class="panel">
+      <img src="storyboard/s09_p01.png" alt="Ghostly figures with phones">
+      <div class="dialogue-area">
+        <div class="narration-box">Dozens of ghostly figures fill the basement, all holding glowing phones. Ordinary people. Some in hospital gowns, some in the clothes they died in.</div>
+        <div class="bubble jagged"><span class="speaker">The Collective</span>"You are live. The stream will not end until average watch-time is satisfied."</div>
+        <div class="bubble"><span class="speaker">Jess</span>"And what does that mean, exactly?"</div>
+        <div class="bubble jagged"><span class="speaker">The Collective</span>"The audience is dead. The dead have excellent retention. We have nowhere else to be."</div>
+      </div>
+    </div>
+    <div class="panel">
+      <img src="storyboard/s09_p02.png" alt="Retention locked">
+      <div class="dialogue-area">
+        <div class="bubble tail-right"><span class="speaker">Marcus</span>"What do you want from us?"</div>
+        <div class="bubble jagged"><span class="speaker">The Collective</span>"The only way out is content we actually want."</div>
+        <div class="bubble"><span class="speaker">Jess</span>"Content you want. You want me to — what — haunt harder?"</div>
+        <div class="bubble jagged"><span class="speaker">The Collective</span>"We want what you stole."</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 10: THE LOOP                              -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene10">
+  <div class="scene-banner reveal">
+    <span class="scene-number">10</span>
+    <span class="scene-title-text">THE LOOP</span>
+    <span class="scene-location">Int. East Wing Hallway — Night</span>
+  </div>
+
+  <div class="panel-grid cols-3 reveal">
+    <div class="panel">
+      <img src="storyboard/s10_p01.png" alt="Escher hallway">
+      <div class="dialogue-area">
+        <div class="narration-box">Marcus bolts. The hallway stretches, then folds back on itself. An Escher loop. He passes the same origami crane seven times. Seven translucent Marcuses occupy the same frame.</div>
+        <div class="bubble tail-right"><span class="speaker">Marcus</span>"I've passed that crane seven times! There's no exit!"</div>
+      </div>
+    </div>
+    <div class="panel">
+      <img src="storyboard/s10_p02.png" alt="Jess pleads into camera">
+      <div class="dialogue-area">
+        <div class="narration-box">Jess pleads into the livestream chat, ghostly comment bubbles floating around her head.</div>
+        <div class="bubble"><span class="speaker">Jess</span>"Please. We didn't mean to hurt anyone. It was just content —"</div>
+      </div>
+    </div>
+    <div class="panel">
+      <img src="storyboard/s10_p03.png" alt="Analytics comment">
+      <div class="dialogue-area">
+        <div class="bubble phone"><span class="speaker">Comment — The Collective</span>"Your CTR peaks at 2:34. We're not leaving at 2:34."</div>
+        <div class="bubble phone"><span class="speaker">Comment — The Collective</span>"Your audience retention is 98.7%. Dead people have excellent retention."</div>
+        <div class="bubble"><span class="speaker">Jess</span>"These are MY analytics. How do you have my analytics?"</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="page-break">END OF ACT I</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 11: MARGARET K.                           -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene11">
+  <div class="scene-banner reveal">
+    <span class="scene-number">11</span>
+    <span class="scene-title-text">MARGARET K.</span>
+    <span class="scene-location">Int. Patient Room 304 — Night</span>
+  </div>
+
+  <div class="panel-grid reveal">
+    <div class="panel wide">
+      <img src="storyboard/s11_p01.png" alt="Margaret K. manifests">
+      <div class="dialogue-area">
+        <div class="narration-box">Margaret K. manifests in the same room where they faked her. Not weeping. Bureaucratically furious. She wears the clothes from her obituary photo.</div>
+        <div class="bubble jagged"><span class="speaker">Margaret K.</span>"You said my husband's name was Arthur. It was Aaron. You said he died in a car accident. It was a stroke. You said I wept at his funeral. I didn't. I was angry."</div>
+        <div class="bubble"><span class="speaker">Jess</span>"I'm sorry — I'll fix it — I'll make a correction —"</div>
+        <div class="bubble jagged"><span class="speaker">Margaret K.</span>"You didn't even spell my name right in the thumbnail. Margaret with a G?"</div>
+        <div class="bubble"><span class="speaker">Jess</span>"I'll fix it —"</div>
+        <div class="bubble jagged"><span class="speaker">Margaret K.</span>"Too late for corrections. You don't get to edit me anymore."</div>
+        <div class="narration-box">She doesn't want revenge. She wants to be named correctly. The horror isn't violence — it's the indignity of being misfiled.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 12: THE COLLECTIVE                        -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene12">
+  <div class="scene-banner reveal">
+    <span class="scene-number">12</span>
+    <span class="scene-title-text">THE COLLECTIVE</span>
+    <span class="scene-location">Int. Chapel — Night</span>
+  </div>
+
+  <div class="panel-grid reveal">
+    <div class="panel wide">
+      <img src="storyboard/s12_p01.png" alt="The pews fill with ghosts">
+      <div class="dialogue-area">
+        <div class="narration-box">The pews fill with ghostly figures — an audience at the world's worst one-woman show. Bored, sarcastic, deeply unimpressed.</div>
+        <div class="bubble jagged"><span class="speaker">The Collective</span>"We've seen your acting. This is better, but you're still overplaying it. Your fear face peaks at the left eyebrow. We have the data."</div>
+        <div class="bubble"><span class="speaker">Jess</span>"Who are you people?"</div>
+        <div class="bubble jagged"><span class="speaker">The Collective</span>"We're everyone you made a villain. Everyone you reduced to a thumbnail. Everyone whose tragedy you turned into content. We're The Collective. And we have receipts."</div>
+        <div class="bubble tail-right"><span class="speaker">Marcus</span>"What do you want from us? We can't undo the videos."</div>
+        <div class="bubble jagged"><span class="speaker">The Collective</span>"The truth. Not your special effects. Not your fishing line. Not your GhostTalkz app. The truth. Live. In one take. No edits."</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 13: THE REAL APOLOGY                      -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene13">
+  <div class="scene-banner reveal">
+    <span class="scene-number">13</span>
+    <span class="scene-title-text">THE REAL APOLOGY</span>
+    <span class="scene-location">Int. Chapel — Night</span>
+  </div>
+
+  <div class="panel-grid reveal">
+    <div class="panel wide">
+      <img src="storyboard/s13_p01.png" alt="Marcus steps forward">
+      <div class="dialogue-area">
+        <div class="bubble"><span class="speaker">Jess</span>"I didn't kill you. I didn't even know you. I stole a name from an obituary. That's not a crime."</div>
+        <div class="bubble jagged"><span class="speaker">The Collective</span>"That's the apology we're waiting for."</div>
+        <div class="narration-box">Marcus steps between them. Tears streaming. Genuine, for the first time in twenty-three episodes.</div>
+        <div class="bubble tail-right"><span class="speaker">Marcus</span>"I'm sorry. For every tear I faked. Every prayer I performed for content. Every 'cold spot' I pretended to feel. Every family I let Jess exploit because I was too scared to ask where the names came from. I knew something was wrong. I didn't ask. I'm sorry."</div>
+        <div class="narration-box">The Collective is silent. Not satisfied. Waiting.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 14: THE CONFESSION                        -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene14">
+  <div class="scene-banner reveal">
+    <span class="scene-number">14</span>
+    <span class="scene-title-text">THE CONFESSION</span>
+    <span class="scene-location">Int. Chapel — Night</span>
+  </div>
+
+  <div class="panel-grid reveal">
+    <div class="panel wide">
+      <img src="storyboard/s14_p01.png" alt="Jess confesses">
+      <div class="dialogue-area">
+        <div class="narration-box">Jess slumps into the warm plastic chair. Someone was sitting in it before she arrived. She looks into the camera. Two million viewers. All dead. All watching.</div>
+        <div class="bubble"><span class="speaker">Jess</span>"I'm Jessica Park. I made up every ghost on this channel. I stole real names from real obituaries. The Weeping Widow was Margaret Kessler. The Demon of Dover Street was Daniel Reeves, sixteen years old. The Lady in White was Dr. Elaine Voss."</div>
+        <div class="bubble"><span class="speaker">Jess</span>"I never asked permission. I never offered corrections. I made your tragedies into my content. I didn't kill you. But I used you. And I'm sorry. Not for the faking. For the theft."</div>
+        <div class="narration-box">She names them all. Every single one. The view count drops. The ghosts begin to fade. Not happy. Just... disappointed enough.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 15: SILENCE                               -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene15">
+  <div class="scene-banner reveal">
+    <span class="scene-number">15</span>
+    <span class="scene-title-text">SILENCE</span>
+    <span class="scene-location">Int. Chapel — Night</span>
+  </div>
+
+  <div class="panel-grid reveal">
+    <div class="panel wide">
+      <img src="storyboard/s15_p01.png" alt="Empty chapel">
+      <div class="dialogue-area">
+        <div class="narration-box">The Collective dissolves like breath on glass. One by one, they simply stop being interested. Not forgiveness. Just exhaustion.</div>
+        <div class="bubble jagged"><span class="speaker">The Collective</span>"Not enough. But enough for now."</div>
+        <div class="sfx">CLICK!</div>
+        <div class="narration-box">The chapel door unlocks with a mechanical sound — the first real-world noise in hours.</div>
+        <div class="bubble tail-right"><span class="speaker">Marcus</span>"It's over."</div>
+        <div class="narration-box">The livestream ends. The phones go dark. Silence. Real, ordinary, beautiful silence.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="page-break">END OF ACT II</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 16: THE DESTRUCTION                       -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene16">
+  <div class="scene-banner reveal">
+    <span class="scene-number">16</span>
+    <span class="scene-title-text">THE DESTRUCTION</span>
+    <span class="scene-location">Ext. Parking Lot — Dawn</span>
+  </div>
+
+  <div class="panel-grid cols-2 reveal">
+    <div class="panel">
+      <img src="storyboard/s16_p01.png" alt="Gray dawn">
+      <div class="dialogue-area">
+        <div class="narration-box">Gray dawn. The streetlight is off. The car starts. They don't speak.</div>
+        <div class="bubble"><span class="speaker">Jess</span>"Deleting the video. Deleting the channel. Deleting the app."</div>
+      </div>
+    </div>
+    <div class="panel">
+      <img src="storyboard/s16_p02.png" alt="Boot mid-stomp">
+      <div class="dialogue-area">
+        <div class="narration-box">She throws the phone onto the asphalt and crushes it under her heel. Glass shatters. The screen goes black.</div>
+        <div class="bubble tail-right"><span class="speaker">Marcus</span>"We're free."</div>
+        <div class="narration-box">They laugh. Ugly, relieved, broken laughter. The laughter of people who have been to the edge of something and been allowed to walk back.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 17: GOOD ONE, ALGORITHM                   -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene17">
+  <div class="scene-banner reveal">
+    <span class="scene-number">17</span>
+    <span class="scene-title-text">GOOD ONE, ALGORITHM</span>
+    <span class="scene-location">Int. Marcus's Car — Dawn</span>
+  </div>
+
+  <div class="panel-grid reveal">
+    <div class="panel wide">
+      <img src="storyboard/s17_p02.png" alt="Notification">
+      <div class="dialogue-area">
+        <div class="narration-box">The hospital shrinks in the rearview. Marcus checks his old Android — the backup phone he kept in the glove compartment.</div>
+        <div class="bubble tail-right"><span class="speaker">Marcus</span>"I'm just gonna text my sister, let her know I'm —"</div>
+        <div class="narration-box">A cheerful DING.</div>
+        <div class="bubble phone"><span class="speaker">Phone</span>"Ghost Bros is TRENDING!"</div>
+        <div class="bubble tail-right"><span class="speaker">Marcus</span>"Good one, algorithm."</div>
+        <div class="narration-box">He laughs. Jess doesn't.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 18: NOT A JOKE                            -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene18">
+  <div class="scene-banner reveal">
+    <span class="scene-number">18</span>
+    <span class="scene-title-text">NOT A JOKE</span>
+    <span class="scene-location">Int. Marcus's Car — Dawn</span>
+  </div>
+
+  <div class="panel-grid reveal">
+    <div class="panel wide">
+      <img src="storyboard/s18_p01.png" alt="Phone screen">
+      <div class="dialogue-area">
+        <div class="narration-box">Jess grabs the phone. The channel exists. Not restored — NEW. A sleek logo. Professional editing. A horror soundtrack neither of them added.</div>
+        <div class="bubble"><span class="speaker">Jess</span>"The confession is gone. Someone edited this."</div>
+        <div class="bubble tail-right"><span class="speaker">Marcus</span>"We didn't make this. Jess, we didn't make any of this."</div>
+        <div class="narration-box">The video playing: their fear, their real haunting, cut for maximum suspense. Subscriber count climbs: 10 million. 20 million. 50 million.</div>
+        <div class="bubble"><span class="speaker">Jess</span>"It's not a joke."</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 19: WE KNOW YOU                           -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene19">
+  <div class="scene-banner reveal">
+    <span class="scene-number">19</span>
+    <span class="scene-title-text">WE KNOW YOU</span>
+    <span class="scene-location">Int. Marcus's Car — Dawn</span>
+  </div>
+
+  <div class="panel-grid cols-2 reveal">
+    <div class="panel">
+      <img src="storyboard/s19_p01.png" alt="Delete regenerates">
+      <div class="dialogue-area">
+        <div class="bubble"><span class="speaker">Jess</span>"I'm deleting it."</div>
+        <div class="narration-box">She hits DELETE CHANNEL. The page refreshes. The channel is back.</div>
+        <div class="bubble"><span class="speaker">Jess</span>"What —"</div>
+        <div class="narration-box">She hits REPORT. The button transforms into a thumbs-up. "Thanks for your engagement!"</div>
+        <div class="bubble tail-right"><span class="speaker">Marcus</span>"Jess, stop. You're feeding it."</div>
+      </div>
+    </div>
+    <div class="panel">
+      <img src="storyboard/s19_p02.png" alt="Password">
+      <div class="dialogue-area">
+        <div class="narration-box">She tries to log out. The password field auto-fills: her mother's maiden name. She never used that password for anything.</div>
+        <div class="bubble phone"><span class="speaker">Comment — St. Mary's Admin</span>"We know you."</div>
+        <div class="bubble"><span class="speaker">Jess</span>"It knows my mother's name. It knows everything."</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 20: THE BREAKING POINT                    -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene20">
+  <div class="scene-banner reveal">
+    <span class="scene-number">20</span>
+    <span class="scene-title-text">THE BREAKING POINT</span>
+    <span class="scene-location">Ext. Roadside — Dawn</span>
+  </div>
+
+  <div class="panel-grid reveal">
+    <div class="panel wide">
+      <img src="storyboard/s20_p01.png" alt="Jess screams">
+      <div class="dialogue-area">
+        <div class="narration-box">They pull over on the shoulder. Jess gets out of the car. The empty field stretches to the horizon.</div>
+        <div class="bubble jagged"><span class="speaker">Jess</span>"LEAVE US ALONE!"</div>
+        <div class="narration-box">She screams until her voice breaks. It changes nothing. Marcus sobs in the driver's seat, forehead against the steering wheel.</div>
+        <div class="narration-box">The phone, sitting on the dashboard, dings.</div>
+        <div class="bubble phone"><span class="speaker">Phone</span>"+1,000,000 subscribers"</div>
+        <div class="narration-box">Ding.</div>
+        <div class="bubble phone"><span class="speaker">Phone</span>"+1,000,000 subscribers"</div>
+        <div class="narration-box">Ding. Ding. Ding. Like a heartbeat. Like a timer. Like engagement.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 21: NEVER OUT                             -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene21">
+  <div class="scene-banner reveal">
+    <span class="scene-number">21</span>
+    <span class="scene-title-text">NEVER OUT</span>
+    <span class="scene-location">Ext. Hospital Parking Lot — Dawn</span>
+  </div>
+
+  <div class="panel-grid reveal">
+    <div class="panel wide">
+      <img src="storyboard/s21_p01.png" alt="Hospital gone">
+      <div class="dialogue-area">
+        <div class="narration-box">They drive back. The hospital is gone. Not demolished — absent. Just an empty lot and the one buzzing streetlight.</div>
+        <div class="bubble tail-right"><span class="speaker">Marcus</span>"Where is it?"</div>
+        <div class="narration-box">But the livestream is still active. Background: the parking lot. They are in the frame. Walking around the empty lot. Looking for a building that doesn't exist.</div>
+        <div class="bubble"><span class="speaker">Jess</span>"We never left."</div>
+        <div class="narration-box">The video shows them from a high angle. A drone shot. There is no drone.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 22: THE STREAM NEVER ENDS                 -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene22">
+  <div class="scene-banner reveal">
+    <span class="scene-number">22</span>
+    <span class="scene-title-text">THE STREAM NEVER ENDS</span>
+    <span class="scene-location">Ext. Hospital Parking Lot — Dawn</span>
+  </div>
+
+  <div class="panel-grid reveal">
+    <div class="panel wide">
+      <img src="storyboard/s22_p01.png" alt="Infinity">
+      <div class="dialogue-area">
+        <div class="narration-box">A thousand phones materialize in the gray dawn air. Held by invisible hands. Every screen shows Ghost Bros. Every screen shows their faces.</div>
+        <div class="narration-box">The view count is no longer a number — it is a symbol.</div>
+        <div class="sfx">&infin;</div>
+        <div class="bubble phone"><span class="speaker">Comment — St. Mary's Admin</span>"Engagement is forever. Thank you for the content."</div>
+        <div class="narration-box">Jess and Marcus stand frozen in the parking lot. Their own faces appear on a thousand screens around them. The phones are held by the invisible dead — watching, waiting, subscribing.</div>
+        <div class="bubble"><span class="speaker">Jess</span>"We need to go live."</div>
+        <div class="bubble tail-right"><span class="speaker">Marcus</span>"We are live."</div>
+        <div class="narration-box">They were never the hosts. They were the content. And the show never ends.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- END PAGE                                        -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="end-page" id="end">
+  <h2 class="reveal">THE END</h2>
+  <p class="reveal">There is no Scene 23. There is only the stream.</p>
+  <div class="infinity reveal">&infin;</div>
+</section>
+
+<script>
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+reveals.forEach(el => observer.observe(el));
+
+// Navbar scroll
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 60);
+});
+</script>
+</body>
+</html>
