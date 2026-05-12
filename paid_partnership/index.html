@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PAID PARTNERSHIP — The Comic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=EB+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #fff8f0;
+    --ink: #1a1a1a;
+    --accent: #e85d8a;
+    --accent-gold: #d4a843;
+    --accent-sage: #8fb38e;
+    --panel-bg: #1a1520;
+    --bubble-bg: #fff8f0;
+    --gutter: 16px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Comic Neue', sans-serif;
+    color: var(--paper);
+    background: var(--ink);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* Halftone texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.03;
+    background-image: radial-gradient(circle, #fff8f0 1px, transparent 1px);
+    background-size: 8px 8px;
+  }
+
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--ink); }
+  ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
+
+  /* ── Navigation ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 16px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(to bottom, var(--ink) 70%, transparent);
+    transition: background 0.3s;
+  }
+  nav.scrolled { background: rgba(26,26,26,0.95); backdrop-filter: blur(8px); }
+  nav .logo {
+    font-family: 'Bangers', cursive;
+    font-size: 22px;
+    letter-spacing: 3px;
+    color: var(--paper);
+  }
+  nav .logo span { color: var(--accent); }
+  nav .nav-links {
+    display: flex;
+    gap: 24px;
+    list-style: none;
+  }
+  nav .nav-links a {
+    font-family: 'Comic Neue', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--paper);
+    text-decoration: none;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+  }
+  nav .nav-links a:hover { opacity: 1; color: var(--accent); }
+
+  /* ── Cover Page ── */
+  .comic-cover {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    padding: 40px 20px;
+    background: linear-gradient(180deg, #0c0c0c 0%, #1a1520 30%, #2d1f2d 60%, #1a1520 100%);
+    overflow: hidden;
+  }
+  .comic-cover .cover-bg {
+    position: absolute;
+    inset: 0;
+    opacity: 0.12;
+    background: url('comic_strips/scene1.png') center/cover no-repeat;
+    filter: grayscale(40%) contrast(1.1) brightness(0.6);
+  }
+  .comic-cover .cover-content {
+    position: relative;
+    z-index: 2;
+  }
+  .comic-cover .issue-label {
+    font-family: 'Bangers', cursive;
+    font-size: 14px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent-gold);
+    margin-bottom: 16px;
+  }
+  .comic-cover h1 {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(48px, 12vw, 120px);
+    letter-spacing: 4px;
+    line-height: 0.9;
+    color: var(--paper);
+    text-shadow: 4px 4px 0 var(--accent), 8px 8px 0 rgba(232,93,138,0.3);
+    margin-bottom: 12px;
+  }
+  .comic-cover .tagline {
+    font-family: 'EB Garamond', serif;
+    font-size: clamp(18px, 3vw, 26px);
+    font-style: italic;
+    color: var(--accent-gold);
+    max-width: 500px;
+    margin: 0 auto 32px;
+  }
+  .comic-cover .meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent-sage);
+    opacity: 0.8;
+  }
+  .comic-cover .scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Bangers', cursive;
+    font-size: 14px;
+    letter-spacing: 2px;
+    color: var(--paper);
+    opacity: 0.5;
+    animation: bounce 2s infinite;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-8px); }
+  }
+
+  /* ── Cast Page ── */
+  .cast-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 80px 20px;
+  }
+  .cast-header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .cast-header h2 {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(32px, 5vw, 56px);
+    letter-spacing: 3px;
+    color: var(--paper);
+    text-shadow: 3px 3px 0 var(--accent);
+  }
+  .cast-header p {
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--accent-gold);
+    margin-top: 8px;
+  }
+  .cast-grid {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 20px;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .cast-card {
+    flex: 0 0 calc(33.333% - 14px);
+    background: var(--panel-bg);
+    border: 3px solid var(--paper);
+    overflow: hidden;
+  }
+  .cast-card img {
+    width: 100%;
+    display: block;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    object-position: top;
+    border-bottom: 3px solid var(--paper);
+  }
+  .cast-card .cast-info {
+    padding: 20px;
+  }
+  .cast-card .cast-name {
+    font-family: 'Bangers', cursive;
+    font-size: 24px;
+    letter-spacing: 2px;
+    color: var(--paper);
+    margin-bottom: 4px;
+  }
+  .cast-card .cast-role {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .cast-card .cast-desc {
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(245,240,232,0.7);
+  }
+
+  /* ── Comic Page ── */
+  .comic-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 20px;
+    border-bottom: 2px dashed rgba(245,240,232,0.1);
+  }
+  .comic-page:last-of-type { border-bottom: none; }
+
+  .scene-banner {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding: 16px 20px;
+    background: var(--panel-bg);
+    border: 3px solid var(--paper);
+    border-left: 6px solid var(--accent);
+  }
+  .scene-number {
+    font-family: 'Bangers', cursive;
+    font-size: 28px;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .scene-title-text {
+    font-family: 'Bangers', cursive;
+    font-size: 24px;
+    letter-spacing: 2px;
+    color: var(--paper);
+  }
+  .scene-location {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--accent-gold);
+  }
+
+  /* ── Full Panel (for AI-generated manga pages) ── */
+  .full-panel {
+    background: var(--panel-bg);
+    border: 3px solid var(--paper);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: var(--gutter);
+  }
+  .full-panel img {
+    width: 100%;
+    display: block;
+    object-fit: contain;
+  }
+
+  /* ── Dialogue Area ── */
+  .dialogue-area {
+    padding: 14px 16px;
+    background: var(--panel-bg);
+    border-top: 2px solid var(--paper);
+  }
+
+  /* ── Narration Box ── */
+  .narration-box {
+    background: rgba(232, 93, 138, 0.08);
+    border: 2px solid var(--accent);
+    padding: 14px 18px;
+    margin: 12px 0;
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--paper);
+  }
+  .narration-box strong { color: var(--accent-gold); font-weight: 600; }
+
+  /* ── Speech Bubble ── */
+  .bubble {
+    background: var(--bubble-bg);
+    color: var(--ink);
+    padding: 10px 14px;
+    border-radius: 16px;
+    position: relative;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 8px;
+    box-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+  }
+  .bubble:last-child { margin-bottom: 0; }
+  .bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 24px;
+    width: 0; height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 12px solid var(--bubble-bg);
+  }
+  .bubble.tail-right::after { left: auto; right: 24px; }
+  .bubble .speaker {
+    display: block;
+    font-family: 'Bangers', cursive;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--accent);
+    margin-bottom: 2px;
+  }
+
+  /* ── Dialogue Stack ── */
+  .dialogue-stack {
+    background: var(--panel-bg);
+    border: 3px solid var(--paper);
+    border-top: none;
+    padding: 16px;
+    margin-bottom: var(--gutter);
+  }
+  .dialogue-stack .bubble { margin-bottom: 10px; }
+
+  /* ── Page Break ── */
+  .page-break {
+    text-align: center;
+    padding: 40px 0;
+    font-family: 'Bangers', cursive;
+    font-size: 18px;
+    color: var(--accent);
+    letter-spacing: 4px;
+  }
+  .page-break::before, .page-break::after {
+    content: '♥ ♥ ♥';
+    display: block;
+    margin: 8px 0;
+    color: var(--paper);
+    opacity: 0.3;
+  }
+
+  /* ── End Page ── */
+  .end-page {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 60px 20px;
+    background: linear-gradient(180deg, #1a1520 0%, #0c0c0c 100%);
+  }
+  .end-page h2 {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(36px, 8vw, 80px);
+    letter-spacing: 4px;
+    color: var(--paper);
+    text-shadow: 3px 3px 0 var(--accent);
+    margin-bottom: 16px;
+  }
+  .end-page p {
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--accent-gold);
+    max-width: 500px;
+    margin-bottom: 8px;
+  }
+  .end-page .taco {
+    font-size: 64px;
+    margin-top: 24px;
+    animation: wiggle 2s ease-in-out infinite;
+  }
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    nav { padding: 12px 16px; }
+    nav .nav-links { display: none; }
+    .scene-banner { flex-wrap: wrap; }
+    .scene-location { margin-left: 0; width: 100%; margin-top: 8px; }
+    .cast-grid { flex-wrap: nowrap; gap: 12px; }
+    .cast-card { flex: 0 0 calc(33.333% - 8px); }
+  }
+
+  /* ── Reveal ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav id="navbar">
+  <div class="logo">Paid <span>Partnership</span></div>
+  <ul class="nav-links">
+    <li><a href="#cast">Cast</a></li>
+    <li><a href="#scene01">Scene 1</a></li>
+    <li><a href="#scene10">Scene 10</a></li>
+    <li><a href="#scene20">Scene 20</a></li>
+  </ul>
+</nav>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- COVER PAGE                                      -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-cover" id="top">
+  <div class="cover-bg"></div>
+  <div class="cover-content">
+    <div class="issue-label">A Rom-Com Short &middot; 30 Minutes</div>
+    <h1>PAID<br>PARTNERSHIP</h1>
+    <p class="tagline">Two influencers fake-dating for brand deals discover the only thing faker than their relationship might be who they've been pretending to be.</p>
+    <p class="meta">23 Scenes &middot; Full Manga Layout &middot; A Romantic Comedy</p>
+  </div>
+  <div class="scroll-hint">Scroll to Read &darr;</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- CAST OF CHARACTERS                              -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="cast-page" id="cast">
+  <div class="cast-header reveal">
+    <h2>Meet the Cast</h2>
+    <p>The stars of Instagram's favorite fake couple.</p>
+  </div>
+  <div class="cast-grid">
+    <div class="cast-card reveal">
+      <img src="characters/drea.png" alt="Drea Santos">
+      <div class="cast-info">
+        <div class="cast-name">Drea Santos</div>
+        <div class="cast-role">Age 28 &middot; The Face</div>
+        <div class="cast-desc">@dreadoesit — 800K followers. Built a brand on "authentic chaos." Beneath the curated mess is a former art student who remembers what it felt like to make something without an audience.</div>
+      </div>
+    </div>
+    <div class="cast-card reveal">
+      <img src="characters/benji.png" alt="Benji Park">
+      <div class="cast-info">
+        <div class="cast-name">Benji Park</div>
+        <div class="cast-role">Age 30 &middot; The Heart</div>
+        <div class="cast-desc">@gentlebenji — 1.2M followers. The internet's "softboi" sweetheart. Former social worker who genuinely wanted to help people before he discovered helping people pays less than pretending to.</div>
+      </div>
+    </div>
+    <div class="cast-card reveal">
+      <img src="characters/cass.png" alt="Cass Mendez">
+      <div class="cast-info">
+        <div class="cast-name">Cass Mendez</div>
+        <div class="cast-role">Age 45 &middot; The Agent</div>
+        <div class="cast-desc">Veteran agent of three influencer divorces and one NFT scandal. Exists primarily through FaceTime in increasingly expensive blazers. Not evil, just exhaustively pragmatic.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 01: THE REHEARSAL                         -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene01">
+  <div class="scene-banner reveal">
+    <span class="scene-number">01</span>
+    <span class="scene-title-text">THE REHEARSAL</span>
+    <span class="scene-location">Int. The Loft — Night</span>
+  </div>
+  <div class="full-panel reveal">
+    <img src="comic_strips/scene1.png" alt="Scene 1: The Rehearsal">
+  </div>
+  <div class="narration-box reveal">Drea and Benji rehearse their livestreamed proposal. She laughs at his script. He corrects her fake-surprised face. The loaner ring sits on the coffee table like a tiny bomb.</div>
+</section>
+
+<div class="page-break">To Be Continued</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 02: THE CALL                              -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene02">
+  <div class="scene-banner reveal">
+    <span class="scene-number">02</span>
+    <span class="scene-title-text">THE CALL</span>
+    <span class="scene-location">Int. The Loft — Night</span>
+  </div>
+  <div class="full-panel reveal">
+    <img src="comic_strips/scene2.png" alt="Scene 2: The Call">
+  </div>
+  <div class="narration-box reveal">Cass video-calls from Dubai (or a very good virtual background). The sponsors are threatening to pull out. The proposal is now a make-or-break moment.</div>
+</section>
+
+<div class="page-break">To Be Continued</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 03: THE STORY                             -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene03">
+  <div class="scene-banner reveal">
+    <span class="scene-number">03</span>
+    <span class="scene-title-text">THE STORY</span>
+    <span class="scene-location">Int. The Loft — Night</span>
+  </div>
+  <div class="full-panel reveal">
+    <img src="comic_strips/scene3.png" alt="Scene 3: The Story">
+  </div>
+  <div class="narration-box reveal">Drea stages an Instagram Story: "Behind the scenes of the MOST SPECIAL NIGHT." 40K likes in four minutes. Neither of them is looking at each other.</div>
+</section>
+
+<div class="page-break">To Be Continued</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 04: THE FIGHT                             -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene04">
+  <div class="scene-banner reveal">
+    <span class="scene-number">04</span>
+    <span class="scene-title-text">THE FIGHT</span>
+    <span class="scene-location">Int. The Loft — Night</span>
+  </div>
+  <div class="full-panel reveal">
+    <img src="comic_strips/scene4.png" alt="Scene 4: The Fight">
+  </div>
+  <div class="narration-box reveal">The insults land because they're true. The tension shifts from professional to personal. And then — a light flickers.</div>
+</section>
+
+<div class="page-break">To Be Continued</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 05: BLACKOUT                              -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene05">
+  <div class="scene-banner reveal">
+    <span class="scene-number">05</span>
+    <span class="scene-title-text">BLACKOUT</span>
+    <span class="scene-location">Int. The Loft — Night</span>
+  </div>
+  <div class="full-panel reveal">
+    <img src="comic_strips/scene5.png" alt="Scene 5: Blackout">
+  </div>
+  <div class="narration-box reveal">Complete blackout. Phones dead. No chargers. Just two people, a fake apartment, and two hours of darkness. Drea swears for 45 seconds. Benji lights a candle.</div>
+</section>
+
+<div class="page-break">To Be Continued</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 06: CANDLELIGHT                           -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene06">
+  <div class="scene-banner reveal">
+    <span class="scene-number">06</span>
+    <span class="scene-title-text">CANDLELIGHT</span>
+    <span class="scene-location">Int. The Loft — Candlelight</span>
+  </div>
+  <div class="full-panel reveal">
+    <img src="comic_strips/scene6.png" alt="Scene 6: Candlelight">
+  </div>
+  <div class="narration-box reveal">Benji lights LED candles with actual matches. The fake apartment looks almost real in the amber glow. For the first time, the set feels like a room.</div>
+</section>
+
+<div class="page-break">To Be Continued</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 07: THE JOURNAL                           -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene07">
+  <div class="scene-banner reveal">
+    <span class="scene-number">07</span>
+    <span class="scene-title-text">THE JOURNAL</span>
+    <span class="scene-location">Int. The Loft — Candlelight</span>
+  </div>
+  <div class="full-panel reveal">
+    <img src="comic_strips/scene7.png" alt="Scene 7: The Journal">
+  </div>
+  <div class="narration-box reveal">Drea finds Benji's gratitude journal. Blank pages. He quotes an old entry. Real emotion. Drea doesn't make a joke.</div>
+</section>
+
+<div class="page-break">To Be Continued</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 08: THE CONFESSION                        -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene08">
+  <div class="scene-banner reveal">
+    <span class="scene-number">08</span>
+    <span class="scene-title-text">THE CONFESSION</span>
+    <span class="scene-location">Int. The Loft — Candlelight</span>
+  </div>
+  <div class="full-panel reveal">
+    <img src="comic_strips/scene8.png" alt="Scene 8: The Confession">
+  </div>
+  <div class="narration-box reveal">Drea confesses: her "toxic ex" was a hired actor. The breakup was scripted. The discovery that they're both faking everything is bonding, not betrayal.</div>
+</section>
+
+<div class="page-break">To Be Continued</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 09: WONDERWALL                            -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene09">
+  <div class="scene-banner reveal">
+    <span class="scene-number">09</span>
+    <span class="scene-title-text">WONDERWALL</span>
+    <span class="scene-location">Int. The Loft — Candlelight</span>
+  </div>
+  <div class="full-panel reveal">
+    <img src="comic_strips/scene9.png" alt="Scene 9: Wonderwall">
+  </div>
+  <div class="narration-box reveal">They discover a guitar under the prop bed. Benji plays terribly. Drea sings worse. They laugh until they're breathless. For a moment, no brands, no personas — just two people who sound like hell and don't care.</div>
+</section>
+
+<div class="page-break">To Be Continued</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 10: BEFORE                                -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene10">
+  <div class="scene-banner reveal">
+    <span class="scene-number">10</span>
+    <span class="scene-title-text">BEFORE</span>
+    <span class="scene-location">Int. The Loft — Candlelight</span>
+  </div>
+  <div class="full-panel reveal">
+    <img src="comic_strips/scene10.png" alt="Scene 10: Before">
+  </div>
+  <div class="narration-box reveal">They talk about who they were before the personas took over. Both mourn their former selves without quite admitting it.</div>
+</section>
+
+<div class="page-break">To Be Continued</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 11: AMANDA                                -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene11">
+  <div class="scene-banner reveal">
+    <span class="scene-number">11</span>
+    <span class="scene-title-text">AMANDA</span>
+    <span class="scene-location">Int. The Loft — Candlelight</span>
+  </div>
+  <div class="full-panel reveal">
+    <img src="comic_strips/scene11.png" alt="Scene 11: Amanda">
+  </div>
+  <div class="narration-box reveal">Amanda calls on 1% battery. Benji tells her to take the night off. The phone dies. The quiet returns.</div>
+</section>
+
+<div class="page-break">To Be Continued</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 12: THE QUESTION                          -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene12">
+  <div class="scene-banner reveal">
+    <span class="scene-number">12</span>
+    <span class="scene-title-text">THE QUESTION</span>
+    <span class="scene-location">Int. The Loft — Candlelight</span>
+  </div>
+  <div class="full-panel reveal">
+    <img src="comic_strips/scene12.png" alt="Scene 12: The Question">
+  </div>
+  <div class="narration-box reveal">Drea asks what he'd do if he quit. He says coach Little League and read too much. She says paint murals in ugly buildings. He says he'd like to see that.</div>
+</section>
+
+<div class="page-break">To Be Continued</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 13: THE SLEEP                             -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene13">
+  <div class="scene-banner reveal">
+    <span class="scene-number">13</span>
+    <span class="scene-title-text">THE SLEEP</span>
+    <span class="scene-location">Int. The Loft — Candlelight</span>
+  </div>
+  <div class="full-panel reveal">
+    <img src="comic_strips/scene13.png" alt="Scene 13: The Sleep">
+  </div>
+  <div class="narration-box reveal">They doze off on the prop bed — not touching, facing each other. The candles flicker. The fake apartment is quiet. <strong>For the first time in three months, nobody is performing.</strong></div>
+</section>
+
+<div class="page-break">To Be Continued</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 14: THE SNAP                              -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene14">
+  <div class="scene-banner reveal">
+    <span class="scene-number">14</span>
+    <span class="scene-title-text">THE SNAP</span>
+    <span class="scene-location">Int. The Loft — Night</span>
+  </div>
+  <div class="full-panel reveal">
+    <img src="comic_strips/scene14.png" alt="Scene 14: The Snap">
+  </div>
+  <div class="narration-box reveal">The lights snap on. Phones explode with notifications. Reality returns like a slap. The livestream is in ten minutes. The machine waits.</div>
+</section>
+
+<div class="page-break">To Be Continued</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 15: GOING LIVE                            -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene15">
+  <div class="scene-banner reveal">
+    <span class="scene-number">15</span>
+    <span class="scene-title-text">GOING LIVE</span>
+    <span class="scene-location">Int. The Loft — Night</span>
+  </div>
+  <div class="full-panel reveal">
+    <img src="comic_strips/scene15.png" alt="Scene 15: Going Live">
+  </div>
+  <div class="narration-box reveal">Drea starts the livestream. 200K people waiting. Benji watches, his face falling — he thinks she's choosing the brand over the truth.</div>
+</section>
+
+<div class="page-break">To Be Continued</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 16: THE SCRIPT                            -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene16">
+  <div class="scene-banner reveal">
+    <span class="scene-number">16</span>
+    <span class="scene-title-text">THE SCRIPT</span>
+    <span class="scene-location">Int. The Loft — Night</span>
+  </div>
+  <div class="full-panel reveal">
+    <img src="comic_strips/scene16.png" alt="Scene 16: The Script">
+  </div>
+  <div class="narration-box reveal">Drea begins the proposal script. The numbers climb. Benji thinks this is it — she's choosing the brand. She gets to "[ pause for emotion ]." She pauses.</div>
+</section>
+
+<div class="page-break">To Be Continued</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 17: NONE OF THIS IS REAL                  -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene17">
+  <div class="scene-banner reveal">
+    <span class="scene-number">17</span>
+    <span class="scene-title-text">NONE OF THIS IS REAL</span>
+    <span class="scene-location">Int. The Loft — Night</span>
+  </div>
+  <div class="full-panel reveal">
+    <img src="comic_strips/scene17.png" alt="Scene 17: None of This Is Real">
+  </div>
+  <div class="narration-box reveal">Drea confesses live. Every lie. Every real name she stole. She doesn't ask for forgiveness — she just names them all. The view count drops. The ghosts begin to fade.</div>
+</section>
+
+<div class="page-break">To Be Continued</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 18: YES                                   -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene18">
+  <div class="scene-banner reveal">
+    <span class="scene-number">18</span>
+    <span class="scene-title-text">YES</span>
+    <span class="scene-location">Int. The Loft — Night</span>
+  </div>
+  <div class="full-panel reveal">
+    <img src="comic_strips/scene18.png" alt="Scene 18: Yes">
+  </div>
+  <div class="narration-box reveal">Benji outs his own brand. Then he turns to Drea and says yes — to the tacos, to the murals, to something real. They end the stream. The numbers climb. They don't look.</div>
+</section>
+
+<div class="page-break">To Be Continued</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 19: OUTSIDE                               -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene19">
+  <div class="scene-banner reveal">
+    <span class="scene-number">19</span>
+    <span class="scene-title-text">OUTSIDE</span>
+    <span class="scene-location">Ext. Brooklyn Street — Night</span>
+  </div>
+  <div class="full-panel reveal">
+    <img src="comic_strips/scene19.png" alt="Scene 19: Outside">
+  </div>
+  <div class="narration-box reveal">They step outside. Real air. Real noise. Drea's eyelash is falling off. Benji's shirt has a taco sauce stain. They find a truck. The real world is messy, ungoverned, and alive.</div>
+</section>
+
+<div class="page-break">To Be Continued</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 20: THE TACOS                             -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene20">
+  <div class="scene-banner reveal">
+    <span class="scene-number">20</span>
+    <span class="scene-title-text">THE TACOS</span>
+    <span class="scene-location">Ext. Taco Truck — Night</span>
+  </div>
+  <div class="full-panel reveal">
+    <img src="comic_strips/scene20.png" alt="Scene 20: The Tacos">
+  </div>
+  <div class="narration-box reveal">Two al pastor tacos each. Paper plates. No filters. They argue about hot sauce. Drea carries emergency hot sauce. Benji is delighted.</div>
+</section>
+
+<div class="page-break">To Be Continued</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 21: FACE DOWN                             -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene21">
+  <div class="scene-banner reveal">
+    <span class="scene-number">21</span>
+    <span class="scene-title-text">FACE DOWN</span>
+    <span class="scene-location">Ext. Taco Truck — Night</span>
+  </div>
+  <div class="full-panel reveal">
+    <img src="comic_strips/scene21.png" alt="Scene 21: Face Down">
+  </div>
+  <div class="narration-box reveal">Cass threatens legal action. Sponsors are "re-evaluating." Drea turns her phone face-down. Benji does the same. "Hi." "Hi." They're meeting for the first time.</div>
+</section>
+
+<div class="page-break">To Be Continued</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 22: NO ❤️                                 -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene22">
+  <div class="scene-banner reveal">
+    <span class="scene-number">22</span>
+    <span class="scene-title-text">NO ❤️</span>
+    <span class="scene-location">Ext. Taco Truck — Night</span>
+  </div>
+  <div class="full-panel reveal">
+    <img src="comic_strips/scene22.png" alt="Scene 22: No Heart">
+  </div>
+  <div class="narration-box reveal">"Authentic Tacos — Partnership Inquiry." They look at each other. Laugh. Drea types "no ❤️" and hits send. The algorithm can wait.</div>
+</section>
+
+<div class="page-break">To Be Continued</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCENE 23: THE END                               -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="comic-page" id="scene23">
+  <div class="scene-banner reveal">
+    <span class="scene-number">23</span>
+    <span class="scene-title-text">THE END</span>
+    <span class="scene-location">Ext. Taco Truck — Night</span>
+  </div>
+  <div class="full-panel reveal">
+    <img src="comic_strips/scene23.png" alt="Scene 23: The End">
+  </div>
+  <div class="narration-box reveal">Two phones, face-down on a metal table. Two people, face-up under a streetlight that flickers but doesn't go out. In the attention economy, the most radical act is honesty. Also: tacos.</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- END PAGE                                        -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="end-page" id="end">
+  <h2>PAID<br>PARTNERSHIP</h2>
+  <p>In the attention economy, the most radical act isn't a viral proposal.</p>
+  <p>It's honesty.</p>
+  <div class="taco">🌮</div>
+</section>
+
+<script>
+// Navbar scroll effect
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 50) navbar.classList.add('scrolled');
+  else navbar.classList.remove('scrolled');
+});
+
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
